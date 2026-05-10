@@ -180,6 +180,7 @@
       }
 
       .hero-card {
+        position: relative;
         border: 1px solid transparent;
         background:
           linear-gradient(146deg, #ffffff 0%, #f8fdfb 48%, #f0f8ff 100%) padding-box,
@@ -407,6 +408,12 @@
 
       .mainContent1 {
         padding-top: 1rem;
+        padding-bottom: 0;
+      }
+
+      /* Avoid stacking global mainContent1 bottom padding with .aboutPanel section padding */
+      main.mainContent1 > section:last-child {
+        padding-bottom: 18px;
       }
 
       .heroNavigate,
@@ -925,7 +932,7 @@
   
     <footer class="footer">
       <div class="container-xl footerShell">
-        <div class="footerTop row gy-5">
+        <div class="footerTop row gy-4">
           <div class="col-lg-5 col-md-12">
             <div class="footerBrandCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="60">
               <img src="./assets/images/bgLogo.png" alt="Atlas Hub logo" class="footerLogo">
