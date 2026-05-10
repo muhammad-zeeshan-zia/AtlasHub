@@ -865,6 +865,43 @@ body {
   --atlas-shadow-hover: 0 18px 34px rgba(30, 67, 58, 0.14);
 }
 
+/* Resources listings: card hover matches category tab pills (lift + shadow + tinted surface). */
+body.resources-page .resourceCard:hover,
+body.resources-page .resource-card:hover {
+  transform: translateY(-1px);
+  background:
+    linear-gradient(135deg, #eef8f5 0%, #e8f3fb 58%, #f4faf8 100%) padding-box,
+    linear-gradient(130deg, rgba(124, 200, 182, 0.82), rgba(138, 183, 255, 0.85), rgba(240, 168, 131, 0.74)) border-box;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.06),
+    var(--atlas-shadow-hover);
+}
+
+body.resources-page .resourceCard:hover .cardHeaderBand,
+body.resources-page .resource-card:hover .cardHeaderBand {
+  background:
+    linear-gradient(180deg, #f8fdfb 0%, #ecf7f4 100%) padding-box,
+    linear-gradient(120deg, rgba(124, 200, 182, 0.68), rgba(138, 183, 255, 0.78), rgba(240, 168, 131, 0.68)) border-box;
+}
+
+body.resources-page .resourceCard.search-hit:hover,
+body.resources-page .resource-card.search-hit:hover {
+  background:
+    linear-gradient(135deg, #eef8f5 0%, #e8f3fb 58%, #f4faf8 100%) padding-box,
+    linear-gradient(130deg, rgba(124, 200, 182, 0.82), rgba(138, 183, 255, 0.85), rgba(240, 168, 131, 0.74)) border-box;
+  box-shadow:
+    0 0 0 3px rgba(138, 183, 255, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.06),
+    var(--atlas-shadow-hover);
+}
+
+body.resources-page .resourceCard.search-hit:hover .cardHeaderBand,
+body.resources-page .resource-card.search-hit:hover .cardHeaderBand {
+  background:
+    linear-gradient(180deg, #f8fdfb 0%, #ecf7f4 100%) padding-box,
+    linear-gradient(120deg, rgba(124, 200, 182, 0.68), rgba(138, 183, 255, 0.78), rgba(240, 168, 131, 0.68)) border-box;
+}
+
 body {
   margin: 0;
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;

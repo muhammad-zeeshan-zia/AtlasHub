@@ -76,6 +76,11 @@ body {
   padding-bottom: 20px;
 }
 
+/* Deep links (e.g. resources.html#clothing): keep pane top clear of fixed navbar */
+body.resources-page #myTabContent > .tab-pane[id] {
+  scroll-margin-top: 6.75rem;
+}
+
 .search-filter-container {
   padding: 14px 18px 12px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
@@ -106,7 +111,8 @@ body {
   color: rgba(50, 76, 71, 0.6);
 }
 
-.resourceCard {
+.resourceCard,
+.resource-card {
   width: 92%;
   max-width: 980px;
   min-width: min(320px, 100%);
@@ -116,13 +122,8 @@ body {
   border: 1px solid rgba(82, 90, 85, 0.08);
   background: linear-gradient(180deg, #fffdf7 0%, #f3e4cb 100%);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
-}
-
-.resourceCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
-  border-color: rgba(234, 126, 87, 0.26);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease,
+    background 0.15s ease;
 }
 
 .cardBody {
@@ -138,6 +139,7 @@ body {
   padding: 12px 16px;
   text-align: center;
   margin-bottom: 14px;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .resourceCardTitle {
@@ -271,14 +273,16 @@ body.resources-search-mode #myTabContent {
   margin-top: 0;
 }
 
-.resourceCard.search-hit {
+.resourceCard.search-hit,
+.resource-card.search-hit {
   box-shadow:
     0 0 0 3px rgba(234, 126, 87, 0.4),
     0 16px 36px rgba(0, 0, 0, 0.12);
 }
 
 @media (max-width: 900px) {
-  .resourceCard {
+  .resourceCard,
+  .resource-card {
     width: 94%;
     padding: 18px 16px 26px;
   }
@@ -680,6 +684,19 @@ body::after {
   color: #20453d;
 }
 
+.nav-tabs .nav-link:hover:not(.active) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  background:
+    linear-gradient(135deg, #f5fbfa 0%, #f0f8fc 100%) padding-box,
+    linear-gradient(120deg, rgba(124, 200, 182, 0.52), rgba(138, 183, 255, 0.52), rgba(240, 168, 131, 0.52)) border-box;
+}
+
+.nav-tabs .nav-link.active:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(30, 67, 58, 0.14);
+}
+
 .search-filter-container input {
   border-color: rgba(59, 139, 123, 0.2);
   background: rgba(255, 255, 255, 0.92);
@@ -690,16 +707,34 @@ body::after {
   box-shadow: 0 0 0 3px rgba(59, 139, 123, 0.16);
 }
 
-.resourceCard {
+.resourceCard,
+.resource-card {
   border: 1px solid transparent;
   background:
     linear-gradient(180deg, #ffffff 0%, #fcfffe 100%) padding-box,
     linear-gradient(130deg, rgba(124, 200, 182, 0.72), rgba(138, 183, 255, 0.78), rgba(240, 168, 131, 0.66)) border-box;
   box-shadow: var(--atlas-shadow-soft);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease,
+    background 0.15s ease;
 }
 
-.resourceCard:hover {
-  box-shadow: var(--atlas-shadow-hover);
+/* Match category tab pills: lift, shadow, and tinted surface on hover */
+.resourceCard:hover,
+.resource-card:hover {
+  transform: translateY(-1px);
+  background:
+    linear-gradient(135deg, #eef8f5 0%, #e8f3fb 58%, #f4faf8 100%) padding-box,
+    linear-gradient(130deg, rgba(124, 200, 182, 0.82), rgba(138, 183, 255, 0.85), rgba(240, 168, 131, 0.74)) border-box;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.06),
+    var(--atlas-shadow-hover);
+}
+
+.resourceCard:hover .cardHeaderBand,
+.resource-card:hover .cardHeaderBand {
+  background:
+    linear-gradient(180deg, #f8fdfb 0%, #ecf7f4 100%) padding-box,
+    linear-gradient(120deg, rgba(124, 200, 182, 0.68), rgba(138, 183, 255, 0.78), rgba(240, 168, 131, 0.68)) border-box;
 }
 
 .cardHeaderBand {
@@ -746,10 +781,30 @@ body::after {
     linear-gradient(120deg, rgba(124, 200, 182, 0.5), rgba(138, 183, 255, 0.52), rgba(240, 168, 131, 0.42)) border-box;
 }
 
-.resourceCard.search-hit {
+.resourceCard.search-hit,
+.resource-card.search-hit {
   box-shadow:
     0 0 0 3px rgba(138, 183, 255, 0.45),
     0 16px 36px rgba(0, 0, 0, 0.11);
+}
+
+.resourceCard.search-hit:hover,
+.resource-card.search-hit:hover {
+  transform: translateY(-1px);
+  background:
+    linear-gradient(135deg, #eef8f5 0%, #e8f3fb 58%, #f4faf8 100%) padding-box,
+    linear-gradient(130deg, rgba(124, 200, 182, 0.82), rgba(138, 183, 255, 0.85), rgba(240, 168, 131, 0.74)) border-box;
+  box-shadow:
+    0 0 0 3px rgba(138, 183, 255, 0.45),
+    0 6px 16px rgba(0, 0, 0, 0.06),
+    var(--atlas-shadow-hover);
+}
+
+.resourceCard.search-hit:hover .cardHeaderBand,
+.resource-card.search-hit:hover .cardHeaderBand {
+  background:
+    linear-gradient(180deg, #f8fdfb 0%, #ecf7f4 100%) padding-box,
+    linear-gradient(120deg, rgba(124, 200, 182, 0.68), rgba(138, 183, 255, 0.78), rgba(240, 168, 131, 0.68)) border-box;
 }
 
 .footer {

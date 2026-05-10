@@ -77,7 +77,7 @@ app.post("/api/users/me/saved-resources", auth, saveResource);
 app.delete("/api/users/me/saved-resources/:resourceId", auth, unsaveResource);
 app.post("/api/donations/checkout", auth, userOnly, donationController.createCheckoutSession);
 app.get("/api/resources/approved", getApprovedResources);
-app.post("/api/resources", auth, submitResource);
+app.post("/api/resources", submitResource);
 app.get("/api/admin/resources", auth, adminOnly, getAllResources);
 app.get("/api/admin/resources/pending", auth, adminOnly, getPendingResources);
 app.patch("/api/admin/resources/:id/status", auth, adminOnly, setResourceStatus);

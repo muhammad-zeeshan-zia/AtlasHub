@@ -114,25 +114,10 @@ const resourceSchema = new mongoose.Schema(
       type: [sectionSchema],
       default: []
     },
-    submitterName: {
-      type: String,
-      trim: true,
-      default: ""
-    },
-    submitterEmail: {
-      type: String,
-      trim: true,
-      default: ""
-    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending"
-    },
-    submittedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
     },
     approvedBy: {
       type: mongoose.Schema.Types.ObjectId,

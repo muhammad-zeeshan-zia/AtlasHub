@@ -49,15 +49,24 @@ exports.submitResource = async (req, res) => {
       });
     }
 
+    const {
+      submitterName: _submitterName,
+      submitterEmail: _submitterEmail,
+      submittedBy: _submittedBy,
+      approvedBy: _approvedBy,
+      approvedAt: _approvedAt,
+      status: _status,
+      ...safeBody
+    } = req.body;
+
     const resource = await Resource.create({
-      ...req.body,
+      ...safeBody,
       keywords: req.body.keywords || req.body.orgName || "",
       contactAction: req.body.contactAction || "Call",
       contactNote: req.body.contactNote || "",
       sections,
       latitude,
       longitude,
-      submittedBy: req.user.id,
       status: "pending"
     });
 
@@ -73,7 +82,6 @@ exports.submitResource = async (req, res) => {
 exports.getPendingResources = async (_req, res) => {
   try {
     const resources = await Resource.find({ status: "pending" })
-      .populate("submittedBy", "name email")
       .sort({ createdAt: -1 });
 
     return res.json(resources);
@@ -144,7 +152,6 @@ exports.getAllResources = async (req, res) => {
     }
 
     const resources = await Resource.find(filter)
-      .populate("submittedBy", "name email")
       .populate("approvedBy", "name email")
       .sort({ createdAt: -1 });
 

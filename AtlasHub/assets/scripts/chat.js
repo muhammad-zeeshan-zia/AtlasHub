@@ -7,6 +7,18 @@ const sendBtn = document.getElementById("sendBtn");
 
 let mainQuickRepliesHTML = "";
 
+(function captureMainQuickRepliesHTML() {
+  function run() {
+    const el = document.querySelector("#chatWidget .quick-replies");
+    if (el && !mainQuickRepliesHTML) mainQuickRepliesHTML = el.innerHTML;
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+})();
+
 const RESOURCE_QUICK_TABS = [
   {
     id: "saved",
@@ -79,14 +91,27 @@ const RESOURCE_QUICK_TABS = [
 ];
 
 function restoreMainQuickReplies() {
-  const el = document.querySelector(".quick-replies");
+  const el = document.querySelector("#chatWidget .quick-replies");
   if (!el || !mainQuickRepliesHTML) return;
   el.classList.remove("quick-replies--sub");
   el.innerHTML = mainQuickRepliesHTML;
 }
 
+function moveQuickRepliesToBottom() {
+  const qr = document.querySelector("#chatWidget .quick-replies");
+  if (!qr || !chatBody) return;
+  chatBody.appendChild(qr);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  chatBody.dispatchEvent(new Event("scroll"));
+}
+
+function refreshQuickRepliesAfterBotReply() {
+  restoreMainQuickReplies();
+  moveQuickRepliesToBottom();
+}
+
 function openResourcesQuickSubmenu() {
-  const el = document.querySelector(".quick-replies");
+  const el = document.querySelector("#chatWidget .quick-replies");
   if (!el) return;
   if (!mainQuickRepliesHTML) {
     mainQuickRepliesHTML = el.innerHTML;
@@ -132,6 +157,7 @@ function sendMessageWithText(text) {
   setTimeout(() => {
     removeTyping();
     addMessage(getBotReply(message), "bot");
+    refreshQuickRepliesAfterBotReply();
   }, 500);
 }
 

@@ -10,16 +10,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function scrollToHash() {
     const hash = window.location.hash;
-    if (hash) {
-      const target = document.querySelector(hash);
-      if (target) {
-        const offsetTop = target.offsetTop;
-        window.scrollTo({
-          top: offsetTop,
-          behavior: "smooth",
-        });
-      }
+    if (!hash) return;
+    const target = document.querySelector(hash);
+    if (!target) return;
+    // Resources page: inactive Bootstrap tab panes are hidden; resource.js shows the tab then scrolls.
+    if (
+      target.classList.contains("tab-pane") &&
+      document.getElementById("myTabContent")?.contains(target)
+    ) {
+      return;
     }
+    const navbar = document.querySelector(".navbar.fixed-top");
+    const offset = navbar ? navbar.getBoundingClientRect().height + 12 : 0;
+    const top =
+      target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({
+      top: Math.max(0, top),
+      behavior: "smooth",
+    });
   }
 
   if (loader && loaderBody) {

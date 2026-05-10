@@ -59,39 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
   clearMapPinBtn?.addEventListener('click', clearResourceMapPin);
 
   if (!form) return;
-  const getSession = () => {
-    try {
-      return JSON.parse(localStorage.getItem('atlasAuth') || 'null');
-    } catch (_error) {
-      return null;
-    }
-  };
-
-  const gateMsg = document.getElementById('submitResourceGateMsg');
-  const submitFieldset = document.getElementById('resourceSubmitFieldset');
-
-  const refreshSubmitUi = () => {
-    const session = getSession();
-    const canSubmit = Boolean(session?.user?.role === 'user');
-
-    if (gateMsg) {
-      gateMsg.textContent = canSubmit
-        ? ''
-        : 'Please log in as a user to submit a resource.';
-      gateMsg.classList.toggle('d-none', canSubmit);
-    }
-
-    if (submitFieldset) {
-      submitFieldset.disabled = !canSubmit;
-    }
-
-    if (submitBtn) {
-      submitBtn.disabled = !canSubmit;
-      submitBtn.title = canSubmit
-        ? ''
-        : 'Please log in as a user to submit a resource.';
-    }
-  };
 
   const createContactRowHtml = (contact = {}) => `
     <div class="contact-row border rounded p-2 mb-2">
@@ -208,15 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const sessionGate = getSession();
-    if (!sessionGate?.user || sessionGate.user.role !== 'user') {
-      showMessage(
-        'error',
-        `<i class="bi bi-exclamation-triangle-fill"></i> Please log in as a user to submit a resource.`
-      );
-      return;
-    }
-
     form.querySelectorAll('input, select, textarea').forEach(el => setInvalid(el, false));
 
     // Validation
@@ -283,17 +241,14 @@ document.addEventListener('DOMContentLoaded', () => {
           value: rowEl.querySelector('.contact-value')?.value?.trim() || '',
           note: rowEl.querySelector('.contact-note')?.value?.trim() || ''
         })).filter((contact) => contact.value)
-      })).filter((section) => section.heading || section.footerNote || section.contacts.length),
-      submitterName: document.getElementById('submitterName').value || 'N/A',
-      submitterEmail: document.getElementById('submitterEmail').value || 'N/A'
+      })).filter((section) => section.heading || section.footerNote || section.contacts.length)
     };
 
     try {
       const response = await fetch(`${API_BASE}/resources`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionGate.token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(params)
       });
@@ -320,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
       setTimeout(() => {
-        refreshSubmitUi();
+        submitBtn.disabled = false;
         submitBtn.innerHTML = `
             <i class="bi bi-send-fill"></i>
             Submit Resource
@@ -331,12 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  window.addEventListener('atlas-auth-changed', refreshSubmitUi);
-  window.addEventListener('storage', (event) => {
-    if (event.key === 'atlasAuth') refreshSubmitUi();
-  });
-
-  refreshSubmitUi();
   addSection();
   initResourceLocationMap();
 });

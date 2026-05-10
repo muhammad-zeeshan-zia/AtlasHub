@@ -131,24 +131,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     listEl.innerHTML = visible.map((r) => {
       const status = STATUS_META[r.status] || STATUS_META.pending;
-      const submitterName =
-        r.submitterName ||
-        r.submittedBy?.name ||
-        "Unknown submitter";
-      const submitterEmail =
-        r.submitterEmail || r.submittedBy?.email || "";
 
       const metaItems = [
-        `<div class="admin-meta-item">
-           <i class="bi bi-person-fill" aria-hidden="true"></i>
-           <span><span class="admin-meta-item-strong">${escapeHTML(submitterName)}</span></span>
-         </div>`,
-        submitterEmail
-          ? `<div class="admin-meta-item">
-               <i class="bi bi-envelope" aria-hidden="true"></i>
-               <span>${escapeHTML(submitterEmail)}</span>
-             </div>`
-          : "",
         r.phone
           ? `<div class="admin-meta-item">
                <i class="bi bi-telephone" aria-hidden="true"></i>
@@ -323,8 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const existing = state.resources[idx];
         state.resources[idx] = {
           ...existing,
-          ...updated,
-          submittedBy: existing.submittedBy || updated.submittedBy
+          ...updated
         };
       }
 

@@ -515,6 +515,18 @@ document.addEventListener("DOMContentLoaded", function () {
     renderSavedPane();
   };
 
+  function scrollPaneBelowFixedNavbar(pane) {
+    if (!pane) return;
+    const navbar = document.querySelector(".navbar.fixed-top");
+    const gap = 12;
+    const offset = navbar ? navbar.getBoundingClientRect().height + gap : 96;
+    const run = () => {
+      const top = pane.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    };
+    requestAnimationFrame(() => requestAnimationFrame(run));
+  }
+
   function activateResourceTabFromHash() {
     const hash = (window.location.hash || "").replace(/^#/, "").trim();
     if (!hash) return;
@@ -526,7 +538,15 @@ document.addEventListener("DOMContentLoaded", function () {
         : hash;
     const trigger = document.querySelector(`button[data-bs-target="#${esc}"]`);
     if (trigger && typeof bootstrap !== "undefined" && bootstrap.Tab) {
-      bootstrap.Tab.getOrCreateInstance(trigger).show();
+      const tab = bootstrap.Tab.getOrCreateInstance(trigger);
+      trigger.addEventListener(
+        "shown.bs.tab",
+        () => scrollPaneBelowFixedNavbar(pane),
+        { once: true }
+      );
+      tab.show();
+    } else {
+      scrollPaneBelowFixedNavbar(pane);
     }
   }
 

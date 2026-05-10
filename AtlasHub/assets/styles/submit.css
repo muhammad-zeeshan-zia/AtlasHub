@@ -174,25 +174,6 @@ body.submit-page {
   filter: saturate(1.04);
 }
 
-.submit-resource-gate-msg {
-  margin: 0 0 14px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(180, 61, 48, 0.35);
-  background: rgba(255, 237, 232, 0.92);
-  color: #7c3326;
-  font-weight: 700;
-  font-size: 0.95rem;
-  line-height: 1.45;
-}
-
-.submit-resource-fieldset {
-  border: none;
-  padding: 0;
-  margin: 0;
-  min-width: 0;
-}
-
 .submitForm {
   margin-top: 10px;
 }
