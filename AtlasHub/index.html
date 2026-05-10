@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.2/font/bootstrap-icons.min.css"
+        integrity="sha512-D1liES3uvDpPrgk7vXR/hR/sukGn7EtDWEyvpdLsyalQYq6v6YUsTUJmku7B4rcuQ21rf0UTksw2i/2Pdjbd3g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
+        integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+        integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/styles/index.css">
+    <link rel="stylesheet" href="./assets/styles/all.css">
+    <style>
+      :root {
+        --atlas-bg: #f8fcfb;
+        --atlas-surface: #ffffff;
+        --atlas-primary: #3b8b7b;
+        --atlas-primary-deep: #2b6a5d;
+        --atlas-accent: #e59f7e;
+        --atlas-cool: #8ab7ff;
+        --atlas-text: #1f2f2b;
+        --atlas-soft-border: #e6f0ec;
+        --atlas-gradient-border: linear-gradient(125deg, #7cc8b6 0%, #8ab7ff 45%, #f0a883 100%);
+        --atlas-shadow-soft: 0 10px 26px rgba(30, 67, 58, 0.07);
+        --atlas-shadow-hover: 0 18px 34px rgba(30, 67, 58, 0.12);
+      }
+
+      body {
+        background:
+          linear-gradient(180deg, #fdfffe 0%, #f6fbf8 55%, #f2f8f5 100%),
+          radial-gradient(circle at 10% 2%, rgba(59, 139, 123, 0.16), transparent 42%),
+          radial-gradient(circle at 92% 0%, rgba(229, 159, 126, 0.16), transparent 34%),
+          radial-gradient(circle at 50% 100%, rgba(106, 171, 156, 0.09), transparent 42%),
+          var(--atlas-bg);
+        color: var(--atlas-text);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(to right, rgba(59, 139, 123, 0.035) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(59, 139, 123, 0.03) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: radial-gradient(circle at center, black 45%, transparent 100%);
+        z-index: 0;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 100% 18%, rgba(138, 183, 255, 0.14), transparent 32%),
+          radial-gradient(circle at 0% 78%, rgba(86, 194, 170, 0.12), transparent 36%);
+        z-index: 0;
+      }
+
+      .webpage,
+      .mainContent1,
+      .footer {
+        position: relative;
+        z-index: 1;
+      }
+
+      .nav-background {
+        transition: background 0.45s ease, box-shadow 0.45s ease, backdrop-filter 0.45s ease;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(248, 253, 251, 0.92) 100%) !important;
+        backdrop-filter: blur(16px) saturate(1.2);
+        border-bottom: 1px solid rgba(59, 139, 123, 0.18);
+        box-shadow: 0 10px 28px rgba(18, 43, 36, 0.08);
+      }
+
+      .nav-background.nav-background--scrolled {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.58) 0%,
+          rgba(248, 253, 251, 0.48) 100%
+        ) !important;
+        backdrop-filter: blur(12px) saturate(1.05);
+        box-shadow: 0 6px 22px rgba(18, 43, 36, 0.06);
+      }
+
+      .navbar {
+        padding-top: 0.62rem;
+        padding-bottom: 0.62rem;
+      }
+
+      .navbar-brand .logo {
+        filter: drop-shadow(0 6px 10px rgba(41, 91, 79, 0.15));
+      }
+
+      .navbar .nav-link {
+        color: var(--atlas-text) !important;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+      }
+
+      .button-shape-nav {
+        border-radius: 999px;
+        border: 1px solid transparent;
+        background:
+          linear-gradient(135deg, #f3faf7 0%, #e7f3ee 62%, #e9f0ff 100%) padding-box,
+          linear-gradient(120deg, rgba(124, 200, 182, 0.75), rgba(138, 183, 255, 0.8), rgba(240, 168, 131, 0.7)) border-box;
+        box-shadow: 0 5px 14px rgba(33, 73, 64, 0.08);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      }
+
+      .button-shape-nav .nav-link {
+        padding: 0.55rem 0.95rem !important;
+      }
+
+      .button-shape-nav:hover {
+        transform: translateY(-2px);
+        border-color: rgba(59, 139, 123, 0.33);
+        box-shadow: 0 10px 18px rgba(33, 73, 64, 0.13);
+      }
+
+      .button-shape-nav:has(.nav-link.active),
+      .button-shape-nav.home:has([aria-current="page"]) {
+        background:
+          linear-gradient(135deg, #dbeee2 0%, #cbe7dd 58%, #d7e5ff 100%) padding-box,
+          linear-gradient(120deg, rgba(88, 169, 150, 0.95), rgba(98, 145, 226, 0.9), rgba(226, 141, 100, 0.9)) border-box;
+        box-shadow: 0 10px 20px rgba(50, 112, 99, 0.17);
+      }
+
+      .navbar .nav-link:hover,
+      .navbar .nav-link:focus-visible {
+        color: var(--atlas-primary) !important;
+      }
+
+      .navbar-toggler {
+        border-color: rgba(59, 139, 123, 0.35) !important;
+        background: rgba(246, 252, 249, 0.9);
+      }
+
+      .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.18rem rgba(59, 139, 123, 0.22);
+      }
+
+      @media (max-width: 991.98px) {
+        .navbar-collapse {
+          margin-top: 0.6rem;
+          padding: 0.7rem;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.93);
+          border: 1px solid rgba(59, 139, 123, 0.14);
+          box-shadow: 0 12px 24px rgba(23, 50, 44, 0.12);
+        }
+      }
+
+      .hero-card,
+      .aboutPanelCard,
+      .gridCard,
+      .footerBrandCard,
+      .footerColumnCard,
+      .chat-widget {
+        border: 1px solid var(--atlas-soft-border);
+        box-shadow: var(--atlas-shadow-soft);
+      }
+
+      .hero-card {
+        border: 1px solid transparent;
+        background:
+          linear-gradient(146deg, #ffffff 0%, #f8fdfb 48%, #f0f8ff 100%) padding-box,
+          var(--atlas-gradient-border) border-box;
+        border-radius: 26px;
+        padding: clamp(1rem, 2.5vw, 1.6rem);
+        box-shadow:
+          0 18px 40px rgba(28, 66, 57, 0.10),
+          0 2px 0 rgba(255, 255, 255, 0.8) inset;
+        overflow: hidden;
+      }
+
+      .hero-card::after {
+        content: "";
+        position: absolute;
+        inset: auto -8% -18% auto;
+        width: 310px;
+        height: 310px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(138, 183, 255, 0.18) 0%, rgba(138, 183, 255, 0.01) 70%);
+        pointer-events: none;
+      }
+
+      .hero-image img {
+        border-radius: 20px;
+        box-shadow: 0 14px 30px rgba(26, 59, 51, 0.18);
+      }
+
+      .heroTitle {
+        color: #1b463d;
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+        line-height: 1.15;
+        font-size: clamp(2rem, 4vw, 3.2rem);
+      }
+
+      .diffSubtitleColor {
+        color: #d98558 !important;
+        text-shadow: 0 4px 14px rgba(217, 133, 88, 0.24);
+      }
+
+      .heroSubtitle,
+      .aboutPanelText,
+      .aboutPanelText1,
+      .gridText p,
+      .footerBrandText {
+        color: #4b645d !important;
+        line-height: 1.7;
+      }
+
+      .btn-pill {
+        border-radius: 999px;
+        font-weight: 700;
+        padding: 0.78rem 1.2rem;
+        border: 1px solid transparent;
+        background-clip: padding-box, border-box;
+        box-shadow: 0 7px 16px rgba(27, 58, 50, 0.1);
+        transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease, background-color 0.22s ease;
+      }
+
+      .btn-pill:hover {
+        transform: translateY(-2px) scale(1.01);
+        box-shadow: 0 12px 22px rgba(20, 45, 40, 0.15);
+        filter: saturate(1.06);
+      }
+
+      .btn-sage {
+        background:
+          linear-gradient(135deg, #dcecdf 0%, #c6dcc8 35%, #aac8ad 100%) padding-box,
+          linear-gradient(120deg, rgba(109, 189, 166, 0.9), rgba(143, 188, 255, 0.88)) border-box !important;
+        color: #23453d !important;
+      }
+
+      .btn-sage:hover {
+        background:
+          linear-gradient(135deg, #cde4d0 0%, #b5d2ba 40%, #97bb9f 100%) padding-box,
+          linear-gradient(120deg, rgba(92, 171, 148, 0.95), rgba(118, 167, 244, 0.95)) border-box !important;
+      }
+
+      .btn-clay {
+        background:
+          linear-gradient(135deg, #ffd4bf 0%, #f7b894 45%, #e99468 100%) padding-box,
+          linear-gradient(120deg, rgba(240, 164, 127, 0.95), rgba(145, 187, 251, 0.88)) border-box !important;
+        color: #563423 !important;
+      }
+
+      .btn-clay:hover {
+        background:
+          linear-gradient(135deg, #ffc7aa 0%, #f2a97e 45%, #df8354 100%) padding-box,
+          linear-gradient(120deg, rgba(230, 142, 97, 0.96), rgba(124, 168, 239, 0.93)) border-box !important;
+      }
+
+      .smallerText1,
+      .aboutPanel {
+        background: transparent;
+      }
+
+      .aboutPanelCard {
+        border: 1px solid transparent;
+        background:
+          linear-gradient(165deg, #ffffff 0%, #f9fefd 100%) padding-box,
+          linear-gradient(130deg, rgba(124, 200, 182, 0.7), rgba(138, 183, 255, 0.75), rgba(240, 168, 131, 0.65)) border-box;
+        border-radius: 20px;
+        padding: clamp(1.1rem, 2.5vw, 2rem);
+        box-shadow:
+          0 18px 38px rgba(25, 62, 53, 0.08),
+          0 1px 0 rgba(255, 255, 255, 0.9) inset;
+      }
+
+      .sectionHeader1 h2,
+      .aboutPanelTitle,
+      .gridText h3,
+      .footerTitle,
+      .footerBrandTitle {
+        color: #24584d !important;
+      }
+
+      .aboutPanelTitle .underline {
+        background-image: linear-gradient(transparent 64%, rgba(138, 183, 255, 0.3) 0);
+      }
+
+      .gridCard {
+        border: 1px solid transparent;
+        background:
+          linear-gradient(180deg, #ffffff 0%, #fbfffd 100%) padding-box,
+          linear-gradient(135deg, rgba(124, 200, 182, 0.62), rgba(138, 183, 255, 0.7), rgba(240, 168, 131, 0.55)) border-box;
+        border-radius: 20px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        box-shadow: 0 12px 28px rgba(30, 67, 58, 0.08);
+        backdrop-filter: blur(3px);
+      }
+
+      .gridCard:hover {
+        transform: translateY(-5px);
+        border-color: rgba(59, 139, 123, 0.4);
+        box-shadow: var(--atlas-shadow-hover);
+      }
+
+      .iconFormat {
+        background: linear-gradient(135deg, rgba(59, 139, 123, 0.14), rgba(229, 159, 126, 0.2));
+        border: 1px solid rgba(59, 139, 123, 0.22);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+
+      .iconFormat i,
+      .arrowLink i {
+        color: var(--atlas-primary);
+      }
+
+      .arrowLink i {
+        transition: transform 0.2s ease;
+      }
+
+      .gridCard:hover .arrowLink i {
+        transform: translateX(3px);
+      }
+
+      .extraBox1 {
+        border: 1px solid transparent;
+        background:
+          linear-gradient(180deg, #ffffff 0%, #fcfffe 100%) padding-box,
+          linear-gradient(130deg, rgba(124, 200, 182, 0.72), rgba(138, 183, 255, 0.78), rgba(240, 168, 131, 0.66)) border-box;
+        border-radius: 18px;
+        box-shadow:
+          0 16px 32px rgba(22, 45, 38, 0.08),
+          0 1px 0 rgba(255, 255, 255, 0.75) inset;
+        padding: clamp(1rem, 2.4vw, 1.6rem);
+        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+      }
+
+      .extraBox1:hover {
+        transform: translateY(-3px);
+        border-color: rgba(59, 139, 123, 0.3);
+        box-shadow: 0 20px 36px rgba(22, 45, 38, 0.11);
+      }
+
+      .extraHeading1 {
+        color: #1d4a40;
+      }
+
+      .footer {
+        background: linear-gradient(180deg, #edf7f3 0%, #e5f2ed 100%);
+        border-top: 1px solid rgba(59, 139, 123, 0.16);
+      }
+
+      .footerColumnCard,
+      .footerBrandCard {
+        background: rgba(255, 255, 255, 0.78);
+        border-color: rgba(59, 139, 123, 0.14);
+      }
+
+      .footerLinks a,
+      .footerContactLink,
+      .footerContactItem span,
+      .footerBrandText,
+      .footerCopyright {
+        color: #2f4c45 !important;
+      }
+
+      .footerLinks a:hover,
+      .footerContactLink:hover {
+        color: var(--atlas-primary) !important;
+      }
+
+      .chat-launcher {
+        background: linear-gradient(135deg, var(--atlas-primary), var(--atlas-accent)) !important;
+        box-shadow: 0 10px 22px rgba(59, 139, 123, 0.3);
+      }
+
+      .chat-launcher:hover {
+        transform: translateY(-3px) scale(1.03);
+      }
+
+      .chat-header {
+        background: linear-gradient(135deg, #2d7062 0%, #3f9684 55%, #e59f7e 100%) !important;
+      }
+
+      .chat-widget {
+        border-radius: 18px;
+      }
+
+      .underline {
+        background-image: linear-gradient(transparent 68%, rgba(229, 159, 126, 0.28) 0);
+      }
+
+      .mainContent1 {
+        padding-top: 1rem;
+      }
+
+      .heroNavigate,
+      .resourcesLinks {
+        gap: 0.8rem !important;
+      }
+
+      .sectionHeader1 {
+        margin-bottom: 1.3rem;
+      }
+
+      .sectionHeader1 h2,
+      #highlights-title {
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      .aboutPanelText,
+      .aboutPanelText1 {
+        max-width: 72ch;
+      }
+
+      .aboutPanelText {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      @media (min-width: 992px) {
+        .hero-card {
+          margin-top: 0.6rem;
+        }
+
+        .extraBox1 + .extraBox1 {
+          margin-top: 1.2rem;
+        }
+      }
+
+      .chat-input:focus,
+      .send-btn:focus-visible,
+      .quick-btn:focus-visible,
+      .btn-pill:focus-visible,
+      .nav-link:focus-visible {
+        outline: 2px solid rgba(209, 132, 92, 0.9);
+        outline-offset: 2px;
+      }
+
+      @media (max-width: 991.98px) {
+        .hero-card,
+        .aboutPanelCard,
+        .gridCard {
+          border-radius: 14px;
+        }
+      }
+    </style>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+        integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="icon" type="image/x-icon" href="./assets/images/symbol.png">
+</head>
+
+<body>
+
+  <button class="chat-launcher" id="chatLauncher" aria-label="Open Atlas Hub chat">💬</button>
+
+  <div class="chat-widget" id="chatWidget" aria-live="polite">
+    <div class="chat-header">
+      <div class="chat-header-top">
+        <div class="chat-title-wrap">
+          <div class="chat-avatar">🌿</div>
+          <div>
+            <p class="chat-title">Atlas Hub Support</p>
+             
+          </div>
+        </div>
+        <button class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+      </div>
+      <div class="chat-subtitle">
+        Ask about resources, events, contact info, feedback, or how to use Atlas Hub.
+      </div>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <div class="message-row bot">
+        <div class="message-bubble">
+          Hi! Welcome to Atlas Hub. I can help you find resources, events, contact information, or guide you to the right page.
+        </div>
+      </div>
+
+      <div class="quick-replies">
+        <button type="button" class="quick-btn" data-quick-resources="open">Resources</button>
+        <button class="quick-btn">Events</button>
+        <button class="quick-btn">Contact</button>
+        <button class="quick-btn">Submit Resource</button>
+        <button class="quick-btn">Feedback</button>
+        <button class="quick-btn">Emergency Help</button>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <div class="chat-input-wrap">
+        <input
+          type="text"
+          id="userInput"
+          class="chat-input"
+          placeholder="Ask about resources, events, or support..."
+        />
+        <button class="send-btn" id="sendBtn" aria-label="Send message">➤</button>
+      </div>
+    </div>
+  </div>
+    <div class="webpage">
+      <div class="my-loader-body">
+        <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+  
+        <header class="Header">
+          <nav class="navbar fixed-top navbar-expand-lg nav-background" aria-label="Main navigation">
+            <div class="container-fluid px-md-5 d-flex justify-content-between mx-md-5">
+              <a href="index.html" class="navbar-brand" data-aos="fade-down" data-aos-duration="500">
+                <img class="logo" src="./assets/images/bgLogo.png"
+                     alt="Atlas Hub logo"
+                     width="70" height="70">
+              </a>
+  
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#navbarSupportedContent"
+                      aria-controls="navbarSupportedContent"
+                      aria-expanded="false"
+                      aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+  
+              <div class="collapse navbar-collapse" id="navbarSupportedContent"
+                   data-aos="fade-down" data-aos-duration="500" data-aos-delay="40">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                    <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+                  </li>
+                  <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                    <a class="nav-link" href="./about.html">About</a>
+                  </li>
+                  <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                    <a class="nav-link" href="./resources.html">Resources</a>
+                  </li>
+                  <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                    <a class="nav-link" href="./events.html">Events</a>
+                  </li>
+                  <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                    <a class="nav-link" href="./submit.html">Submit Resource</a>
+                  </li>
+                  <li class="nav-item mx-1 first-nav-button home button-shape-nav d-none" data-admin-review-nav>
+                    <a class="nav-link" href="./admin-review.html">Admin Review</a>
+                  </li>
+                  <li class="nav-item dropdown mx-1 first-nav-button home button-shape-nav nav-emergency-dropdown align-self-center">
+                    <button type="button"
+                            class="nav-link dropdown-toggle atlas-emergency-toggle"
+                            id="emergencyNavDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                            aria-haspopup="true">
+                      Emergency
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end atlas-emergency-menu shadow-sm" aria-labelledby="emergencyNavDropdown">
+                      <li>
+                        <a class="dropdown-item atlas-emergency-item" href="tel:911">
+                          <strong>911</strong>
+                          <span class="d-block small text-muted">Medical, fire, or life-threatening emergency</span>
+                        </a>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <a class="dropdown-item atlas-emergency-item" href="tel:988">
+                          <strong>988</strong>
+                          <span class="d-block small text-muted">Suicide &amp; Crisis Lifeline</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                    <button class="nav-link btn btn-link p-0 border-0" id="openAuthModalBtn" type="button">Login</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
+  
+        <main class="mainContent1" id="main-content">
+          <header class="hero">
+            <div class="hero-card">
+              <div class="hero-image">
+                <img src="./assets/images/index.jpg"
+                     alt="People connecting at a Chester County community event"
+                     loading="eager">
+              </div>
+  
+              <div class="heroContent">
+                <h1 class="heroTitle"
+                    data-aos="fade-up"
+                    data-aos-duration="500"
+                    data-aos-delay="40">
+                  Your Community.<br>
+                  Your Resources.<br>
+                  <span class="diffSubtitleColor">All in one place.</span>
+                </h1>
+  
+                <p class="heroSubtitle"
+                   data-aos="fade-up"
+                   data-aos-duration="500"
+                   data-aos-delay="90">
+                  Whether you're looking for food assistance, healthcare, housing support, education,
+                  or local programs, Atlas Hub makes it easier to find help when you need it most.
+                </p>
+  
+                <div class="heroNavigate"
+                     data-aos="fade-up"
+                     data-aos-duration="500"
+                     data-aos-delay="140">
+                  <a class="btn-pill btn-sage" href="./resources.html">
+                    Explore Resources <i class="bi bi-search ms-1" aria-hidden="true"></i>
+                  </a>
+                  <a class="btn-pill btn-clay" href="./events.html">
+                    View Events <i class="bi bi-calendar2-event ms-1" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+  
+            <section class="smallerText1"
+                     aria-label="Atlas Hub mission"
+                     data-aos="fade-up"
+                     data-aos-duration="450"
+                     data-aos-delay="170">
+              <p>
+                A trusted community platform that brings verified local services together,
+                helping individuals and families quickly find the support they need.
+              </p>
+            </section>
+          </header>
+          <section class="aboutPanel" aria-labelledby="need-help-now-title"
+                   data-aos="fade-up" data-aos-duration="450">
+            <div class="container-xl">
+              <div class="aboutPanelCard">
+                <h2 class="aboutPanelTitle" id="need-help-now-title"
+                    data-aos="fade-down" data-aos-delay="40">
+                  <span class="underline">Need Help Right Now?</span>
+                </h2>
+  
+                <p class="aboutPanelText"
+                   data-aos="fade-up" data-aos-delay="80">
+                  Use these trusted starting points to find help with housing, utilities, food,
+                  healthcare, and other services in Chester County. If you're not sure where to begin,
+                  start with dialing <strong>2‑1‑1</strong>.
+                </p>
+  
+                <div class="extraBox1"
+                     data-aos="zoom-in-up" data-aos-delay="110">
+                  <h3 class="extraHeading1">
+                    <i class="bi bi-telephone-fill me-2" aria-hidden="true"></i>2‑1‑1 (SEPA)
+                  </h3>
+                  <p class="aboutPanelText">
+                    A free, regional social services hotline that connects you with human and social
+                    service resources in your neighborhood, supports coordinated entry for homelessness
+                    services, and guides you toward rent assistance options.
+                  </p>
+                  <div class="resourcesLinks">
+                    <a class="btn-pill btn-sage" href="tel:211">Call 2‑1‑1</a>
+                    <a class="btn-pill btn-clay" href="tel:18669647922">Call 1‑866‑964‑7922</a>
+                  </div>
+                </div>
+  
+                <div class="extraBox1"
+                     data-aos="zoom-in-up" data-aos-delay="160">
+                  <h3 class="extraHeading1">
+                    <i class="bi bi-compass me-2" aria-hidden="true"></i>PA Benefits (COMPASS) &amp; Local Office
+                  </h3>
+                  <p class="aboutPanelText">
+                    Pennsylvania offers assistance programs for individuals and families in need.
+                    You can apply or renew online through COMPASS, or get help from caseworkers at
+                    the County Assistance Office.
+                  </p>
+  
+                  <div class="websiteRow mt-4" data-aos="fade-up" data-aos-delay="200">
+                    <a class="btn-pill btn-sage"
+                       href="https://www.compass.dhs.pa.gov/home/#/"
+                       target="_blank" rel="noopener noreferrer">
+                      <i class="bi bi-globe2" aria-hidden="true"></i>
+                      Website: compass.dhs.pa.gov
+                    </a>
+                  </div>
+  
+                  <p class="aboutPanelText1" data-aos="fade-up" data-aos-delay="230">
+                    <strong>Chester County Assistance Office</strong><br>
+                    100 James Buchanan Drive, Thorndale, PA 19372‑1132<br>
+                    <strong>Hours:</strong> 8:30 a.m. – 4:30 p.m.
+                  </p>
+  
+                  <div class="resourcesLinks" data-aos="fade-up" data-aos-delay="260">
+                    <a class="btn-pill btn-sage" href="tel:18888144698">Call Toll‑Free 1‑888‑814‑4698</a>
+                    <a class="btn-pill btn-sage" href="tel:16104661000">Call 610‑466‑1000</a>
+                    <a class="btn-pill btn-clay" href="tel:16104661042">Call LIHEAP 610‑466‑1042</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="py-4 py-md-5" aria-labelledby="today-title"
+                   data-aos="fade-up" data-aos-duration="450">
+            <div class="container-xl">
+              <div class="sectionHeader1"
+                   data-aos="fade-down" data-aos-delay="40">
+                <h2 id="today-title">What are you looking for today?</h2>
+              </div>
+  
+              <div class="gridLayout">
+                <a class="gridCard" href="./about.html"
+                   data-aos="zoom-in-up" data-aos-delay="80">
+                  <div class="iconFormat">
+                    <i class="bi bi-people" aria-hidden="true"></i>
+                  </div>
+                  <div class="gridText">
+                    <h3>About</h3>
+                    <p>Find documentation, sources, and project information.</p>
+                  </div>
+                  <div class="arrowLink">
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                  </div>
+                </a>
+  
+                <a class="gridCard" href="./resources.html"
+                   data-aos="zoom-in-up" data-aos-delay="120">
+                  <div class="iconFormat">
+                    <i class="bi bi-backpack" aria-hidden="true"></i>
+                  </div>
+                  <div class="gridText">
+                    <h3>Discover Resources</h3>
+                    <p>Browse housing, food, healthcare, education, and more.</p>
+                  </div>
+                  <div class="arrowLink">
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                  </div>
+                </a>
+              </div>
+  
+              <div class="gridLayout">
+                <a class="gridCard" href="./events.html"
+                   data-aos="zoom-in-up" data-aos-delay="160">
+                  <div class="iconFormat">
+                    <i class="bi bi-calendar2-week" aria-hidden="true"></i>
+                  </div>
+                  <div class="gridText">
+                    <h3>Community Events</h3>
+                    <p>Find workshops, local programs, and upcoming support events.</p>
+                  </div>
+                  <div class="arrowLink">
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                  </div>
+                </a>
+  
+                <a class="gridCard" href="./submit.html"
+                   data-aos="zoom-in-up" data-aos-delay="200">
+                  <div class="iconFormat">
+                    <i class="bi bi-envelope-paper" aria-hidden="true"></i>
+                  </div>
+                  <div class="gridText">
+                    <h3>Submit a Resource</h3>
+                    <p>Help others by adding a trusted program or service.</p>
+                  </div>
+                  <div class="arrowLink">
+                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </section>
+          <section class="aboutPanel" aria-labelledby="highlights-title"
+                   data-aos="fade-up" data-aos-duration="450">
+            <div class="container-xl">
+              <div class="aboutPanelCard">
+                <h2 class="aboutPanelTitle" id="highlights-title"
+                    data-aos="fade-down" data-aos-delay="40">
+                  <span class="underline">Highlights</span>
+                </h2>
+  
+                <p class="aboutPanelText"
+                   data-aos="fade-up" data-aos-delay="80">
+                  Here are a few trusted services people ask for most often. Visit the full Resource Hub to browse more options.
+                </p>
+  
+                <div class="extraBox1"
+                     data-aos="zoom-in-up" data-aos-delay="110">
+                  <h3 class="extraHeading1">
+                    <i class="bi bi-heart-pulse me-2" aria-hidden="true"></i>988 Suicide &amp; Crisis Lifeline
+                  </h3>
+                  <p class="aboutPanelText">
+                    If you or someone you care about is in crisis, call or text 988 for free, confidential support 24/7.
+                  </p>
+                  <div class="resourcesLinks">
+                    <a class="btn-pill btn-clay" href="tel:988">Call/Text 988</a>
+                    <a class="btn-pill btn-sage"
+                       href="https://988lifeline.org/"
+                       target="_blank" rel="noopener noreferrer">
+                      Visit Website
+                    </a>
+                  </div>
+                </div>
+  
+                <div class="extraBox1"
+                     data-aos="zoom-in-up" data-aos-delay="150">
+                  <h3 class="extraHeading1">
+                    <i class="bi bi-basket2 me-2" aria-hidden="true"></i>Chester County Food Bank
+                  </h3>
+                  <p class="aboutPanelText">
+                    Food finder, direct distribution, senior support, prepared meals, and nutrition education across the county.
+                  </p>
+                  <div class="resourcesLinks">
+                    <a class="btn-pill btn-clay" href="tel:6108736000">Call Chester County Food Bank</a>
+                    <a class="btn-pill btn-sage"
+                       href="https://chestercountyfoodbank.org/"
+                       target="_blank" rel="noopener noreferrer">
+                      Visit Website
+                    </a>
+                  </div>
+                </div>
+  
+                <div class="extraBox1"
+                     data-aos="zoom-in-up" data-aos-delay="190">
+                  <h3 class="extraHeading1">
+                    <i class="bi bi-house-heart me-2" aria-hidden="true"></i>Safe Harbor
+                  </h3>
+                  <p class="aboutPanelText">
+                    Emergency housing, meals, and support services for unhoused single adults in Chester County.
+                  </p>
+                  <div class="resourcesLinks">
+                    <a class="btn-pill btn-clay" href="tel:6106926550">Call Safe Harbor</a>
+                    <a class="btn-pill btn-sage"
+                       href="https://safeharborofcc.org"
+                       target="_blank" rel="noopener noreferrer">
+                      Visit Website
+                    </a>
+                  </div>
+                </div>
+  
+                <div class="resourcesLinks"
+                     data-aos="fade-up" data-aos-delay="220">
+                  <a class="btn-pill btn-clay" href="./resources.html">Explore All Resources</a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="aboutPanel" aria-labelledby="shoutout-more-title"
+                   data-aos="fade-up" data-aos-duration="450">
+            <div class="container-xl">
+              <div class="aboutPanelCard">
+                <h2 class="aboutPanelTitle" id="shoutout-more-title"
+                    data-aos="fade-down" data-aos-delay="40">
+                  <span class="underline">More ways we can help</span>
+                </h2>
+                <p class="aboutPanelText"
+                   data-aos="fade-up" data-aos-delay="70">
+                  Clothing closets, family supports, and special-needs services often fill gaps other programs don’t cover.
+                  Jump straight into these Resource Hub categories whenever you’re ready.
+                </p>
+                <div class="gridLayout">
+                  <a class="gridCard" href="./resources.html#clothing"
+                     data-aos="zoom-in-up" data-aos-delay="100">
+                    <div class="iconFormat">
+                      <i class="bi bi-bag-heart" aria-hidden="true"></i>
+                    </div>
+                    <div class="gridText">
+                      <h3>Clothing &amp; household</h3>
+                      <p>Coats, basics, household goods, and dignity-centered pantries.</p>
+                    </div>
+                    <div class="arrowLink">
+                      <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </div>
+                  </a>
+                  <a class="gridCard" href="./resources.html#family"
+                     data-aos="zoom-in-up" data-aos-delay="130">
+                    <div class="iconFormat">
+                      <i class="bi bi-people-fill" aria-hidden="true"></i>
+                    </div>
+                    <div class="gridText">
+                      <h3>Family resources</h3>
+                      <p>Parenting support, kinship care, youth programs, and family stability.</p>
+                    </div>
+                    <div class="arrowLink">
+                      <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </div>
+                  </a>
+                  <a class="gridCard" href="./resources.html#specialNeed"
+                     data-aos="zoom-in-up" data-aos-delay="160">
+                    <div class="iconFormat">
+                      <i class="bi bi-universal-access-circle" aria-hidden="true"></i>
+                    </div>
+                    <div class="gridText">
+                      <h3>Special needs services</h3>
+                      <p>Developmental supports, accessibility, advocacy, and respite options.</p>
+                    </div>
+                    <div class="arrowLink">
+                      <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </div>
+                  </a>
+                </div>
+                <div class="resourcesLinks" data-aos="fade-up" data-aos-delay="190">
+                  <a class="btn-pill btn-sage" href="./resources.html">Browse full resource hub</a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  
+    <footer class="footer">
+      <div class="container-xl footerShell">
+        <div class="footerTop row gy-5">
+          <div class="col-lg-5 col-md-12">
+            <div class="footerBrandCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="60">
+              <img src="./assets/images/bgLogo.png" alt="Atlas Hub logo" class="footerLogo">
+              <h3 class="footerBrandTitle">Atlas Hub</h3>
+              <p class="footerBrandText">
+                Connecting communities with trusted local resources — making help easier to find when it matters most.
+              </p>
+            </div>
+          </div>
+  
+          <div class="col-lg-3 col-md-6">
+            <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="100">
+              <h5 class="footerTitle">Useful Links</h5>
+              <ul class="footerLinks">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./resources.html">Resources</a></li>
+                <li><a href="./events.html">Events</a></li>
+                <li><a href="./submit.html">Submit a Resource</a></li>
+              </ul>
+            </div>
+          </div>
+  
+          <div class="col-lg-4 col-md-6">
+            <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="140">
+              <h5 class="footerTitle">Contact</h5>
+              <div class="footerContactList">
+                <p class="footerContactItem">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>Chester Springs, PA Hub</span>
+                </p>
+  
+                <a href="about.html" rel="noopener noreferrer" class="footerContactLink">
+                  <i class="bi bi-chat-dots"></i>
+                  <span>Feedback Form</span>
+                </a>
+  
+                <a href="mailto:atlashubprofessional@gmail.com" class="footerContactLink">
+                  <i class="bi bi-envelope"></i>
+                  <span>atlashubprofessional@gmail.com</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="footerBottomBar">
+          <p class="footerCopyright">© 2026 Atlas Hub. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered auth-modal-dialog">
+        <div class="modal-content auth-modal-shell border-0 shadow">
+          <button type="button" class="btn-close auth-modal-dismiss" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="auth-modal-logo-ring" aria-hidden="true">
+            <img src="./assets/images/symbol.png" alt="" width="52" height="52">
+          </div>
+          <div class="modal-body auth-modal-body">
+            <h2 class="auth-modal-title" id="authModalTitle">Atlas Hub Community Access</h2>
+            <p class="auth-modal-subtitle">Please sign in or create an account.</p>
+
+            <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
+              <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab" aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
+              <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab" aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
+            </div>
+
+            <form id="authModalForm" class="auth-modal-form" novalidate>
+              <div class="auth-modal-panel" data-auth-panel="signin" id="authPanelSignIn" role="tabpanel">
+                <h3 class="auth-modal-section-title">Account Sign In</h3>
+              </div>
+              <div class="auth-modal-panel d-none" data-auth-panel="signup" id="authPanelSignUp" role="tabpanel">
+                <h3 class="auth-modal-section-title">Create Account</h3>
+              </div>
+
+              <div id="authNameWrap" class="auth-modal-field d-none">
+                <label class="auth-modal-label" for="authModalName">Full name</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-person-fill auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalName" class="auth-modal-input form-control border-0 shadow-none" type="text" autocomplete="name" placeholder="Your full name">
+                </div>
+              </div>
+
+              <div class="auth-modal-field">
+                <label class="auth-modal-label" for="authModalEmail">Email Address</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalEmail" class="auth-modal-input form-control border-0 shadow-none" type="email" autocomplete="email" required placeholder="you@example.com">
+                </div>
+              </div>
+
+              <div id="authForgotRow" class="auth-modal-forgot-row">
+                <span class="auth-modal-forgot-spacer" aria-hidden="true"></span>
+                <a href="#" class="auth-modal-forgot" id="authForgotPasswordLink">Forgot Password?</a>
+              </div>
+
+              <div class="auth-modal-field">
+                <label class="auth-modal-label" for="authModalPassword">Password</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="current-password" required placeholder="Enter password">
+                </div>
+              </div>
+
+              <div id="authAdminRow" class="auth-modal-admin-row">
+                <div class="form-check form-switch auth-modal-switch">
+                  <input class="form-check-input" type="checkbox" id="authAdminToggle" role="switch">
+                  <label class="form-check-label auth-modal-switch-label" for="authAdminToggle">Login as admin Include Administrator Access</label>
+                </div>
+              </div>
+
+              <button type="submit" class="auth-modal-submit" id="authModalSubmitBtn">Sign In</button>
+              <button type="button" class="auth-modal-submit auth-modal-submit--signup d-none" id="authSignupBtn">Create Account</button>
+
+              <button type="button" class="auth-modal-logout d-none" id="authLogoutBtn">Log out</button>
+
+              <div id="authModalMsg" class="auth-modal-msg" role="status"></div>
+
+              <p class="auth-modal-footer-hint" id="authModalFooterHint">Don't have an account? Use the tab above to create one.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+    <script src="./assets/scripts/chat.js"></script>
+    <script src="./assets/scripts/env.js"></script>
+    <script src="./assets/scripts/auth.js"></script>
+    <script src="./assets/scripts/loader.js"></script>
+    <script src="./assets/scripts/navbar-scroll.js"></script>
+    <script src="./assets/scripts/navbar-collapse-mobile.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlas Hub</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+        integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+        integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="./assets/styles/events.css">
+  <link rel="stylesheet" href="./assets/styles/all.css">
+  <link rel="icon" type="image/x-icon" href="./assets/images/symbol.png">
+</head>
+
+<body class="events-page">
+
+  <button class="chat-launcher" id="chatLauncher" aria-label="Open Atlas Hub chat">💬</button>
+
+  <div class="chat-widget" id="chatWidget" aria-live="polite">
+    <div class="chat-header">
+      <div class="chat-header-top">
+        <div class="chat-title-wrap">
+          <div class="chat-avatar">🌿</div>
+          <div>
+            <p class="chat-title">Atlas Hub Support</p>
+             
+          </div>
+        </div>
+        <button class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+      </div>
+      <div class="chat-subtitle">
+        Ask about resources, events, contact info, feedback, or how to use Atlas Hub.
+      </div>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <div class="message-row bot">
+        <div class="message-bubble">
+          Hi! Welcome to Atlas Hub. I can help you find resources, events, contact information, or guide you to the right page.
+        </div>
+      </div>
+
+      <div class="quick-replies">
+        <button type="button" class="quick-btn" data-quick-resources="open">Resources</button>
+        <button class="quick-btn">Events</button>
+        <button class="quick-btn">Contact</button>
+        <button class="quick-btn">Submit Resource</button>
+        <button class="quick-btn">Feedback</button>
+        <button class="quick-btn">Emergency Help</button>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <div class="chat-input-wrap">
+        <input
+          type="text"
+          id="userInput"
+          class="chat-input"
+          placeholder="Ask about resources, events, or support..."
+        />
+        <button class="send-btn" id="sendBtn" aria-label="Send message">➤</button>
+      </div>
+    </div>
+  </div>
+  <div class="webpage">
+    <div class="my-loader-body">
+      <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+      <header class="Header">
+        <nav class="navbar fixed-top navbar-expand-lg nav-background" aria-label="Main navigation">
+          <div class="container-fluid px-md-5 d-flex justify-content-between mx-md-5">
+            <a href="index.html" class="navbar-brand" data-aos="fade-down" data-aos-duration="500">
+              <img class="logo" src="./assets/images/bgLogo.png" alt="Atlas Hub logo" width="70" height="70">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"
+                 data-aos="fade-down" data-aos-duration="500" data-aos-delay="50">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./index.html">Home</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./about.html">About</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./resources.html">Resources</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link active" aria-current="page" href="./events.html">Events</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./submit.html">Submit Resource</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav d-none" data-admin-review-nav>
+                  <a class="nav-link" href="./admin-review.html">Admin Review</a>
+                </li>
+                <li class="nav-item dropdown mx-1 first-nav-button home button-shape-nav nav-emergency-dropdown align-self-center">
+                  <button type="button"
+                          class="nav-link dropdown-toggle atlas-emergency-toggle"
+                          id="emergencyNavDropdown"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          aria-haspopup="true">
+                    Emergency
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end atlas-emergency-menu shadow-sm" aria-labelledby="emergencyNavDropdown">
+                    <li>
+                      <a class="dropdown-item atlas-emergency-item" href="tel:911">
+                        <strong>911</strong>
+                        <span class="d-block small text-muted">Medical, fire, or life-threatening emergency</span>
+                      </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <a class="dropdown-item atlas-emergency-item" href="tel:988">
+                        <strong>988</strong>
+                        <span class="d-block small text-muted">Suicide &amp; Crisis Lifeline</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <button class="nav-link btn btn-link p-0 border-0" id="openAuthModalBtn" type="button">Login</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main class="mainContent1" id="main-content">
+        <header class="hero">
+          <div class="hero-card">
+            <div class="hero-image">
+              <img src="./assets/images/events.jpg"
+                   alt="People connecting at a Chester County community event"
+                   loading="eager">
+            </div>
+
+            <div class="heroContent">
+              <p class="eyebrow"
+                 data-aos="fade-up"
+                 data-aos-duration="500"
+                 data-aos-delay="60">
+                Community calendar
+              </p>
+              <h1 class="heroTitle"
+                  data-aos="fade-up"
+                  data-aos-duration="500"
+                  data-aos-delay="80">
+                Discover <span class="underline">local events</span>,<br>
+                <span class="diffSubtitleColor">family programs &amp; trusted calendars.</span>
+              </h1>
+
+              <p class="heroSubtitle"
+                 data-aos="fade-up"
+                 data-aos-duration="500"
+                 data-aos-delay="140">
+                Explore reliable places to find what’s happening in Chester County — from outdoor programs and seasonal
+                activities to local attractions and public events.
+              </p>
+            </div>
+          </div>
+
+          <section class="smallerText1"
+                   aria-label="Atlas Hub mission"
+                   data-aos="fade-up"
+                   data-aos-duration="450"
+                   data-aos-delay="180">
+            <p>
+              These event sources are useful for finding activities, workshops, nature programs, and local things to do.
+              Some programs fill up quickly, so registering early is recommended.
+            </p>
+          </section>
+        </header>
+
+        <section class="eventsMain">
+          <div class="eventsGrid container-xl" aria-label="Featured community event calendars">
+            <article class="eventCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="80">
+              <div class="eventCardTop">
+                <p class="eventLabel">Featured calendar</p>
+                <h2 class="eventTitle">Chester County Parks &amp; Preservation</h2>
+                <p class="eventSummary">
+                  Ranger-led programs, seasonal activities, educational events, restoration opportunities, and outdoor
+                  recreation across Chester County.
+                </p>
+              </div>
+
+              <div class="eventSection">
+                <h3 class="eventSectionTitle">Program categories</h3>
+                <div class="pillRow">
+                  <span class="infoPill"><i class="bi bi-tree" aria-hidden="true"></i> Nature Walks &amp; Hikes</span>
+                  <span class="infoPill"><i class="bi bi-bicycle" aria-hidden="true"></i> Outdoor Activities</span>
+                  <span class="infoPill"><i class="bi bi-water" aria-hidden="true"></i> Aquatic</span>
+                  <span class="infoPill"><i class="bi bi-bullseye" aria-hidden="true"></i> Archery</span>
+                  <span class="infoPill"><i class="bi bi-palette" aria-hidden="true"></i> Arts &amp; Crafts</span>
+                  <span class="infoPill"><i class="bi bi-easel" aria-hidden="true"></i> Classroom</span>
+                  <span class="infoPill"><i class="bi bi-mic" aria-hidden="true"></i> Guest Speakers</span>
+                  <span class="infoPill"><i class="bi bi-flower1" aria-hidden="true"></i> Habitat Restoration</span>
+                  <span class="infoPill"><i class="bi bi-stars" aria-hidden="true"></i> Seasonal</span>
+                  <span class="infoPill"><i class="bi bi-activity" aria-hidden="true"></i> Training</span>
+                  <span class="infoPill"><i class="bi bi-camera-video" aria-hidden="true"></i> Virtual</span>
+                </div>
+              </div>
+
+              <div class="eventSection">
+                <h3 class="eventSectionTitle">Visit</h3>
+                <div class="eventLinkBox">
+                  <span class="eventLinkLabel"><i class="bi bi-globe2" aria-hidden="true"></i> Programs</span>
+                  <a class="eventLink" href="https://www.chesco.org/4608/Programs"
+                     target="_blank" rel="noopener noreferrer">
+                    chesco.org/4608/Programs
+                  </a>
+                </div>
+                <p class="eventNote">Most programs require advance registration.</p>
+              </div>
+
+              <div class="eventFooter">
+                <div class="contactBlock">
+                  <span class="contactPill">
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                    601 Westtown Road, Suite 390, West Chester, PA 19380-0990
+                  </span>
+                </div>
+
+                <div class="contactBlock">
+                  <a class="callButton" href="tel:16103445656">
+                    <i class="bi bi-telephone-fill" aria-hidden="true"></i>
+                    610‑344‑5656
+                  </a>
+                  <span class="contactMeta">Phone</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="eventCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="140">
+              <div class="eventCardTop">
+                <p class="eventLabel">Local guide</p>
+                <h2 class="eventTitle">Chester County’s Brandywine Valley</h2>
+                <p class="eventSummary">
+                  A regional guide with event listings, attractions, local outings, and ideas for things to do throughout
+                  Chester County.
+                </p>
+              </div>
+
+              <div class="eventSection">
+                <h3 class="eventSectionTitle">Explore</h3>
+
+                <div class="eventLinkBox">
+                  <span class="eventLinkLabel">
+                    <i class="bi bi-calendar-event" aria-hidden="true"></i> Events
+                  </span>
+                  <a class="eventLink" href="https://www.brandywinevalley.com/events/"
+                     target="_blank" rel="noopener noreferrer">
+                    brandywinevalley.com/events
+                  </a>
+                </div>
+
+                <div class="eventLinkBox">
+                  <span class="eventLinkLabel">
+                    <i class="bi bi-map" aria-hidden="true"></i> Things to do
+                  </span>
+                  <a class="eventLink" href="https://www.brandywinevalley.com/things-to-do/"
+                     target="_blank" rel="noopener noreferrer">
+                    brandywinevalley.com/things-to-do
+                  </a>
+                </div>
+              </div>
+
+              <div class="eventFooter">
+                <div class="contactBlock">
+                  <span class="contactPill">
+                    <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                    21 W. Market Street, West Chester, PA 19382
+                  </span>
+                </div>
+
+                <div class="contactBlock">
+                  <a class="callButton" href="tel:14847708550">
+                    <i class="bi bi-telephone-fill" aria-hidden="true"></i>
+                    484‑770‑8550
+                  </a>
+                  <span class="contactMeta">Phone</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container-xl footerShell">
+      <div class="footerTop row gy-5">
+        <div class="col-lg-5 col-md-12">
+          <div class="footerBrandCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="60">
+            <img src="./assets/images/bgLogo.png" alt="Atlas Hub logo" class="footerLogo">
+            <h3 class="footerBrandTitle">Atlas Hub</h3>
+            <p class="footerBrandText">
+              Connecting communities with trusted local resources — making help easier to find when it matters most.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="100">
+            <h5 class="footerTitle">Useful Links</h5>
+            <ul class="footerLinks">
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./about.html">About</a></li>
+              <li><a href="./resources.html">Resources</a></li>
+              <li><a href="./events.html">Events</a></li>
+              <li><a href="./submit.html">Submit a Resource</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="140">
+            <h5 class="footerTitle">Contact</h5>
+            <div class="footerContactList">
+              <p class="footerContactItem">
+                <i class="bi bi-geo-alt"></i>
+                <span>Chester Springs, PA Hub</span>
+              </p>
+
+              <a href="about.html" rel="noopener noreferrer" class="footerContactLink">
+                <i class="bi bi-chat-dots"></i>
+                <span>Feedback Form</span>
+              </a>
+
+              <a href="mailto:atlashubprofessional@gmail.com" class="footerContactLink">
+                <i class="bi bi-envelope"></i>
+                <span>atlashubprofessional@gmail.com</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footerBottomBar">
+        <p class="footerCopyright">© 2026 Atlas Hub. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered auth-modal-dialog">
+      <div class="modal-content auth-modal-shell border-0 shadow">
+        <button type="button" class="btn-close auth-modal-dismiss" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="auth-modal-logo-ring" aria-hidden="true">
+          <img src="./assets/images/symbol.png" alt="" width="52" height="52">
+        </div>
+        <div class="modal-body auth-modal-body">
+          <h2 class="auth-modal-title" id="authModalTitle">Atlas Hub Community Access</h2>
+          <p class="auth-modal-subtitle">Please sign in or create an account.</p>
+
+          <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
+            <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab" aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
+            <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab" aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
+          </div>
+
+          <form id="authModalForm" class="auth-modal-form" novalidate>
+            <div class="auth-modal-panel" data-auth-panel="signin" id="authPanelSignIn" role="tabpanel">
+              <h3 class="auth-modal-section-title">Account Sign In</h3>
+            </div>
+            <div class="auth-modal-panel d-none" data-auth-panel="signup" id="authPanelSignUp" role="tabpanel">
+              <h3 class="auth-modal-section-title">Create Account</h3>
+            </div>
+
+            <div id="authNameWrap" class="auth-modal-field d-none">
+              <label class="auth-modal-label" for="authModalName">Full name</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-person-fill auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalName" class="auth-modal-input form-control border-0 shadow-none" type="text" autocomplete="name" placeholder="Your full name">
+              </div>
+            </div>
+
+            <div class="auth-modal-field">
+              <label class="auth-modal-label" for="authModalEmail">Email Address</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalEmail" class="auth-modal-input form-control border-0 shadow-none" type="email" autocomplete="email" required placeholder="you@example.com">
+              </div>
+            </div>
+
+            <div id="authForgotRow" class="auth-modal-forgot-row">
+              <span class="auth-modal-forgot-spacer" aria-hidden="true"></span>
+              <a href="#" class="auth-modal-forgot" id="authForgotPasswordLink">Forgot Password?</a>
+            </div>
+
+            <div class="auth-modal-field">
+              <label class="auth-modal-label" for="authModalPassword">Password</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="current-password" required placeholder="Enter password">
+              </div>
+            </div>
+
+            <div id="authAdminRow" class="auth-modal-admin-row">
+              <div class="form-check form-switch auth-modal-switch">
+                <input class="form-check-input" type="checkbox" id="authAdminToggle" role="switch">
+                <label class="form-check-label auth-modal-switch-label" for="authAdminToggle">Login as admin Include Administrator Access</label>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-modal-submit" id="authModalSubmitBtn">Sign In</button>
+            <button type="button" class="auth-modal-submit auth-modal-submit--signup d-none" id="authSignupBtn">Create Account</button>
+
+            <button type="button" class="auth-modal-logout d-none" id="authLogoutBtn">Log out</button>
+
+            <div id="authModalMsg" class="auth-modal-msg" role="status"></div>
+
+            <p class="auth-modal-footer-hint" id="authModalFooterHint">Don't have an account? Use the tab above to create one.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+    integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
+    integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="./assets/scripts/chat.js"></script>
+  <script src="./assets/scripts/env.js"></script>
+  <script src="./assets/scripts/auth.js"></script>
+  <script src="./assets/scripts/loader.js"></script>
+  <script src="./assets/scripts/navbar-scroll.js"></script>
+  <script src="./assets/scripts/navbar-collapse-mobile.js"></script>
+</body>
+</html>

@@ -1,0 +1,561 @@
+@import url('https://fonts.googleapis.com/css2?family=Alice&family=Inter:wght@400;500;600;700;800&display=swap');
+
+.admin-review-page {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.admin-review-page .admin-review-main {
+  padding-top: 120px;
+  padding-bottom: 3rem;
+}
+
+.admin-review-shell {
+  width: min(1180px, 94%);
+  margin: 0 auto;
+}
+
+/* ---------- Outer card ---------- */
+.admin-review-card {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fcfffe 100%) padding-box,
+    linear-gradient(130deg, rgba(124, 200, 182, 0.72), rgba(138, 183, 255, 0.78), rgba(240, 168, 131, 0.66)) border-box;
+  border-radius: 24px;
+  padding: clamp(1.5rem, 3.2vw, 2.4rem);
+  box-shadow: var(--atlas-shadow-soft, 0 12px 28px rgba(30, 67, 58, 0.08));
+}
+
+/* ---------- Header ---------- */
+.admin-review-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.admin-review-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3b8b7b;
+  font-weight: 800;
+  margin-bottom: 0.55rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(59, 139, 123, 0.1);
+  border: 1px solid rgba(59, 139, 123, 0.18);
+  border-radius: 999px;
+}
+
+.admin-review-title {
+  font-family: "Alice", serif;
+  font-weight: 600;
+  font-size: clamp(1.85rem, 3.2vw, 2.6rem);
+  color: #24584d;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.55rem;
+}
+
+.admin-review-title-accent {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+  text-decoration-color: #d98558;
+}
+
+.admin-review-subtitle {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #4b645d;
+  max-width: 60ch;
+  margin: 0 auto;
+}
+
+/* ---------- Tabs ---------- */
+.admin-review-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 1.25rem 0 1rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(59, 139, 123, 0.14);
+}
+
+.admin-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(59, 139, 123, 0.22);
+  background: rgba(255, 255, 255, 0.92);
+  color: #4b645d;
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  box-shadow: 0 4px 12px rgba(30, 67, 58, 0.05);
+}
+
+.admin-tab:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(30, 67, 58, 0.1);
+  color: #24584d;
+}
+
+.admin-tab-icon {
+  display: inline-flex;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.admin-tab-pending .admin-tab-icon { color: #c98a1d; }
+.admin-tab-approved .admin-tab-icon { color: #2f9b76; }
+.admin-tab-rejected .admin-tab-icon { color: #c0533c; }
+
+.admin-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: rgba(59, 139, 123, 0.1);
+  color: #24584d;
+}
+
+.admin-tab.active {
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 12px 24px rgba(30, 67, 58, 0.18);
+  transform: translateY(-1px);
+}
+
+.admin-tab.active .admin-tab-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.admin-tab.active .admin-tab-icon {
+  color: #ffffff;
+}
+
+.admin-tab-pending.active {
+  background: linear-gradient(135deg, #f4c97a 0%, #e8a843 50%, #c98a1d 100%);
+}
+
+.admin-tab-approved.active {
+  background: linear-gradient(135deg, #4a9e8c 0%, #3b8b7b 48%, #2f7366 100%);
+}
+
+.admin-tab-rejected.active {
+  background: linear-gradient(135deg, #f0a883 0%, #e58361 50%, #c0533c 100%);
+}
+
+/* ---------- Status / message banner ---------- */
+.admin-review-msg {
+  text-align: center;
+  font-size: 0.92rem;
+  font-weight: 600;
+  margin: 0 auto 0.75rem;
+  min-height: 1rem;
+  color: #2f4c45;
+  padding: 0.25rem;
+}
+
+.admin-review-msg.is-error { color: #b42318; }
+.admin-review-msg.is-success { color: #17613a; }
+.admin-review-msg.is-info { color: #3b8b7b; }
+
+/* ---------- Resource list ---------- */
+.admin-resource-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+  padding-top: 0.5rem;
+}
+
+.admin-resource-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid transparent;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f8fdfb 100%) padding-box,
+    linear-gradient(125deg, rgba(124, 200, 182, 0.55), rgba(138, 183, 255, 0.55), rgba(240, 168, 131, 0.5)) border-box;
+  border-radius: 18px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 8px 22px rgba(30, 67, 58, 0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-resource-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(30, 67, 58, 0.13);
+}
+
+.admin-resource-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-resource-card-head-text {
+  min-width: 0;
+}
+
+.admin-resource-card-title {
+  font-family: "Alice", serif;
+  font-size: 1.2rem;
+  color: #24584d;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  word-break: break-word;
+}
+
+.admin-resource-card-category {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3b8b7b;
+  background: rgba(59, 139, 123, 0.1);
+  border: 1px solid rgba(59, 139, 123, 0.18);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.admin-status-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border: 1px solid transparent;
+}
+
+.admin-status-badge i {
+  font-size: 0.85rem;
+}
+
+.admin-status-badge.is-pending {
+  background: rgba(232, 168, 67, 0.14);
+  color: #8a5a10;
+  border-color: rgba(201, 138, 29, 0.35);
+}
+
+.admin-status-badge.is-approved {
+  background: rgba(59, 139, 123, 0.13);
+  color: #1f6d5c;
+  border-color: rgba(59, 139, 123, 0.35);
+}
+
+.admin-status-badge.is-rejected {
+  background: rgba(192, 83, 60, 0.12);
+  color: #8a3622;
+  border-color: rgba(192, 83, 60, 0.35);
+}
+
+.admin-resource-desc {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #4b645d;
+  margin: 0;
+}
+
+.admin-resource-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 10px 12px;
+  background: rgba(244, 252, 249, 0.7);
+  border: 1px solid rgba(59, 139, 123, 0.12);
+  border-radius: 12px;
+}
+
+.admin-meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.86rem;
+  color: #2f4c45;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.admin-meta-item i {
+  color: #3b8b7b;
+  font-size: 0.95rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.admin-meta-item a {
+  color: #3b8b7b;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-meta-item a:hover {
+  text-decoration: underline;
+  color: #2b6a5d;
+}
+
+.admin-meta-item-strong {
+  font-weight: 700;
+  color: #24584d;
+}
+
+.admin-meta-item--map {
+  margin-top: 4px;
+}
+
+.admin-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f6b58e, #ea7e57);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #3f2114 !important;
+  text-decoration: none !important;
+  box-shadow: 0 7px 16px rgba(234, 126, 87, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-map-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(234, 126, 87, 0.38);
+  color: #3f2114 !important;
+}
+
+/* ---------- Status actions ---------- */
+.admin-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.admin-status-actions-label {
+  flex-basis: 100%;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b857c;
+  margin-bottom: 2px;
+}
+
+.admin-status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 0.84rem;
+  font-weight: 800;
+  cursor: pointer;
+  background: #ffffff;
+  color: #3b8b7b;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
+}
+
+.admin-status-btn i {
+  font-size: 0.95rem;
+}
+
+.admin-status-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+  box-shadow: 0 8px 18px rgba(30, 67, 58, 0.14);
+}
+
+.admin-status-btn:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.admin-status-btn--pending {
+  background: linear-gradient(135deg, #fef0d4 0%, #f8d893 50%, #e8a843 100%);
+  color: #6e4910;
+  border-color: rgba(201, 138, 29, 0.35);
+}
+
+.admin-status-btn--approved {
+  background: linear-gradient(135deg, #d3ece2 0%, #9fd3c0 50%, #4a9e8c 100%);
+  color: #1f4d40;
+  border-color: rgba(59, 139, 123, 0.42);
+}
+
+.admin-status-btn--rejected {
+  background: linear-gradient(135deg, #fbdccd 0%, #f3a886 50%, #e58361 100%);
+  color: #6e2a17;
+  border-color: rgba(192, 83, 60, 0.4);
+}
+
+.admin-status-btn.is-current {
+  cursor: default;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.7) inset, 0 6px 16px rgba(30, 67, 58, 0.16);
+  outline: 2px solid rgba(36, 88, 77, 0.45);
+  outline-offset: 1px;
+}
+
+.admin-status-btn.is-current:hover {
+  transform: none;
+}
+
+/* ---------- Loading skeleton & empty state ---------- */
+.admin-skeleton-card {
+  border-radius: 18px;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.85), rgba(248, 253, 251, 0.85)) padding-box,
+    linear-gradient(125deg, rgba(124, 200, 182, 0.4), rgba(138, 183, 255, 0.4), rgba(240, 168, 131, 0.35)) border-box;
+  border: 1px solid transparent;
+  min-height: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-skeleton-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  animation: adminShimmer 1.4s linear infinite;
+}
+
+@keyframes adminShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.admin-empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem 1.25rem;
+}
+
+.admin-empty-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(59, 139, 123, 0.08);
+  border: 1px solid rgba(59, 139, 123, 0.18);
+  color: #3b8b7b;
+  font-size: 2rem;
+  margin-bottom: 0.85rem;
+}
+
+.admin-empty-title {
+  font-family: "Alice", serif;
+  font-size: 1.4rem;
+  color: #24584d;
+  margin: 0 0 0.35rem;
+}
+
+.admin-empty-text {
+  color: #6b857c;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ---------- Gate (admin login required) ---------- */
+.admin-review-gate {
+  text-align: center;
+  padding: 2rem 1rem 1rem;
+  border: 1px dashed rgba(192, 83, 60, 0.4);
+  border-radius: 16px;
+  background: rgba(255, 246, 240, 0.7);
+  color: #7c3326;
+}
+
+.admin-review-gate i {
+  font-size: 1.85rem;
+  color: #c0533c;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.admin-review-gate-title {
+  font-family: "Alice", serif;
+  color: #7c3326;
+  font-size: 1.3rem;
+  margin: 0 0 0.4rem;
+}
+
+.admin-review-gate-text {
+  font-size: 0.95rem;
+  color: #7c3326;
+  margin: 0;
+}
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 768px) {
+  .admin-review-page .admin-review-main {
+    padding-top: 110px;
+  }
+
+  .admin-resource-list {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-tab {
+    padding: 8px 14px;
+    font-size: 0.88rem;
+  }
+
+  .admin-status-btn {
+    padding: 6px 11px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-review-card {
+    padding: 1.25rem;
+    border-radius: 18px;
+  }
+
+  .admin-review-tabs {
+    gap: 6px;
+  }
+
+  .admin-tab {
+    padding: 7px 11px;
+    font-size: 0.82rem;
+  }
+
+  .admin-tab-label {
+    display: none;
+  }
+
+  .admin-tab.active .admin-tab-label {
+    display: inline;
+  }
+}

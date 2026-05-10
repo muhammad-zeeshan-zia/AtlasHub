@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting — Atlas Hub</title>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search || "");
+      var sid = params.get("session_id");
+      var dest = sid
+        ? "./about.html?donation_success=1&session_id=" + encodeURIComponent(sid)
+        : "./about.html#donate";
+      window.location.replace(dest);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0;url=./about.html#donate">
+</head>
+
+<body>
+  <p style="font-family: system-ui, sans-serif; padding: 1.5rem;">
+    <a href="./about.html#donate">Continue to About</a> if you are not redirected.
+  </p>
+</body>
+
+</html>

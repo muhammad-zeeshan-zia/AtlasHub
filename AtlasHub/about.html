@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atlas Hub</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.2/font/bootstrap-icons.min.css"
+    integrity="sha512-D1liES3uvDpPrgk7vXR/hR/sukGn7EtDWEyvpdLsyalQYq6v6YUsTUJmku7B4rcuQ21rf0UTksw2i/2Pdjbd3g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
+    integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="./assets/styles/about.css">
+  <link rel="stylesheet" href="./assets/styles/all.css">
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+    integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/x-icon" href="./assets/images/symbol.png">
+
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function () {
+      emailjs.init({
+        publicKey: "Uy2MxOgQlI0tl8_Yk",
+      });
+    })();
+  </script>
+</head>
+
+<body>
+
+  <button class="chat-launcher" id="chatLauncher" aria-label="Open Atlas Hub chat">💬</button>
+
+  <div class="chat-widget" id="chatWidget" aria-live="polite">
+    <div class="chat-header">
+      <div class="chat-header-top">
+        <div class="chat-title-wrap">
+          <div class="chat-avatar">🌿</div>
+          <div>
+            <p class="chat-title">Atlas Hub Support</p>
+
+          </div>
+        </div>
+        <button class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+      </div>
+      <div class="chat-subtitle">
+        Ask about resources, events, contact info, feedback, or how to use Atlas Hub.
+      </div>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <div class="message-row bot">
+        <div class="message-bubble">
+          Hi! Welcome to Atlas Hub. I can help you find resources, events, contact information, or guide you to the
+          right page.
+        </div>
+      </div>
+
+      <div class="quick-replies">
+        <button type="button" class="quick-btn" data-quick-resources="open">Resources</button>
+        <button class="quick-btn">Events</button>
+        <button class="quick-btn">Contact</button>
+        <button class="quick-btn">Submit Resource</button>
+        <button class="quick-btn">Feedback</button>
+        <button class="quick-btn">Emergency Help</button>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <div class="chat-input-wrap">
+        <input type="text" id="userInput" class="chat-input" placeholder="Ask about resources, events, or support..." />
+        <button class="send-btn" id="sendBtn" aria-label="Send message">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="webpage">
+    <div class="my-loader-body">
+      <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+      <header class="Header">
+        <nav class="navbar fixed-top navbar-expand-lg nav-background" aria-label="Main navigation">
+          <div class="container-fluid px-md-5 d-flex justify-content-between mx-md-5">
+            <a href="index.html" class="navbar-brand" data-aos="fade-down" data-aos-duration="500">
+              <img class="logo" src="./assets/images/bgLogo.png" alt="Atlas Hub logo" width="70" height="70" />
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+              aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" data-aos="fade-down"
+              data-aos-duration="500" data-aos-delay="40">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./index.html">Home</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link active" aria-current="page" href="./about.html">About</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./resources.html">Resources</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./events.html">Events</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./submit.html">Submit Resource</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav d-none" data-admin-review-nav>
+                  <a class="nav-link" href="./admin-review.html">Admin Review</a>
+                </li>
+                <li class="nav-item dropdown mx-1 first-nav-button home button-shape-nav nav-emergency-dropdown align-self-center">
+                  <button type="button"
+                          class="nav-link dropdown-toggle atlas-emergency-toggle"
+                          id="emergencyNavDropdown"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          aria-haspopup="true">
+                    Emergency
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end atlas-emergency-menu shadow-sm" aria-labelledby="emergencyNavDropdown">
+                    <li>
+                      <a class="dropdown-item atlas-emergency-item" href="tel:911">
+                        <strong>911</strong>
+                        <span class="d-block small text-muted">Medical, fire, or life-threatening emergency</span>
+                      </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <a class="dropdown-item atlas-emergency-item" href="tel:988">
+                        <strong>988</strong>
+                        <span class="d-block small text-muted">Suicide &amp; Crisis Lifeline</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <button class="nav-link btn btn-link p-0 border-0" id="openAuthModalBtn" type="button">Login</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main class="mainContent1" id="main-content">
+        <header class="aboutHero">
+          <div class="aboutHeroCard">
+            <div class="aboutHeroImage">
+              <img src="./assets/images/about.jpg"
+                alt="Books, notes, and a laptop representing research and documentation" />
+            </div>
+
+            <div class="aboutHeroContent">
+              <p class="eyebrow" data-aos="fade-up" data-aos-duration="500" data-aos-delay="40">
+                About
+              </p>
+
+              <h1 class="aboutHeroTitle" data-aos="fade-up" data-aos-duration="500" data-aos-delay="90">
+                Documentation, sources, and project work,
+                <span class="accentText">all in one place.</span>
+              </h1>
+
+              <p class="aboutHeroSubtitle" data-aos="fade-up" data-aos-duration="500" data-aos-delay="140">
+                This page brings together feedback, supporting documents, and framework information
+                used to build Atlas Hub as a community resource platform.
+              </p>
+
+              <p class="aboutHeroSubtitle second" data-aos="fade-up" data-aos-duration="500" data-aos-delay="190">
+                Use these sections to explore our research, citations, work log, and the tools that
+                helped shape this website.
+              </p>
+            </div>
+          </div>
+        </header>
+        <section class="aboutSection" aria-labelledby="feedback-title" data-aos="fade-up" data-aos-duration="450">
+          <div class="container-xl">
+            <div class="infoCard formCard">
+              <div class="sectionIntro" data-aos="fade-down" data-aos-delay="40">
+                <p class="eyebrow">Get in touch</p>
+                <h2 class="sectionTitle" id="feedback-title">Feedback</h2>
+                <p class="sectionText">
+                  Share suggestions, concerns, or ideas that could make Atlas Hub more helpful
+                  for the community.
+                </p>
+              </div>
+
+              <div class="prettyFormWrap" data-aos="zoom-in-up" data-aos-delay="110">
+                <form class="modelForm" onsubmit="sendMail(event)">
+                  <div class="formGrid">
+                    <div class="formField">
+                      <label for="discoverSource" class="form-label">How did you find this website?</label>
+                      <select name="to_name" id="to_name" class="form-select" required>
+                        <option value="">Select Option</option>
+                        <option value="Google / Search engine">Google / Search engine</option>
+                        <option value="TSA Competition">TSA Competition</option>
+                        <option value="Friend or colleague referral">Friend or colleague referral</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <div class="formField">
+                      <label for="replyEmail" class="form-label">Email (optional — if you’d like a reply)</label>
+                      <input type="email" class="form-control" id="from_name" name="from_name"
+                        placeholder="name@example.com" />
+                    </div>
+                  </div>
+
+                  <div class="formField">
+                    <label for="comments" class="form-label">Comments, suggestions, or issues?</label>
+                    <textarea class="form-control" id="comments" rows="5" placeholder="Share your thoughts here..."
+                      name="comments" required></textarea>
+                  </div>
+
+                  <button type="submit" class="prettyBtn" id="submitBtn">
+                    Submit Feedback
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="aboutSection" id="donate" aria-labelledby="donate-title" data-aos="fade-up"
+          data-aos-duration="450">
+          <div class="container-xl">
+            <div class="infoCard donateCard">
+              <div class="donateLayout">
+                <div class="donateIntro sectionIntro">
+                  <p class="eyebrow">Support the hub</p>
+                  <h2 class="sectionTitle" id="donate-title">Donate to Atlas Hub</h2>
+                  <p class="sectionText">
+                    Help keep trusted community resources discoverable and up to date.
+                    Choose an amount and complete checkout securely—you’ll be redirected to Stripe to pay by card.
+                  </p>
+                  <ul class="donateBullets" aria-label="What donations support">
+                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Listing maintenance and review time
+                    </li>
+                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Hosting and platform improvements
+                    </li>
+                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Nonprofit, community-focused tooling
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="donatePanel">
+                  <div class="donatePanelInner">
+                    <p id="donateGateMessage" class="donateGate alert alert-light border shadow-sm d-none"
+                      role="status"></p>
+
+                    <div id="donateActivePanel" class="d-none">
+                      <p class="donateSecureNote">
+                        <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                        Signed in as a community member. Payments are processed by Stripe; Atlas Hub does not store card
+                        numbers.
+                      </p>
+
+                      <label class="form-label donateLabel" for="donateAmountInput">Amount (USD)</label>
+                      <div class="donateAmountWrap">
+                        <span class="donateCurrency" aria-hidden="true">$</span>
+                        <input type="number" class="form-control donateAmountInput" id="donateAmountInput" min="1"
+                          step="0.01" inputmode="decimal" autocomplete="off" placeholder="25.00"
+                          aria-describedby="donateAmountHint" />
+                      </div>
+                      <p class="donateFieldHint" id="donateAmountHint">Minimum $1.00.</p>
+
+                      <div class="donateQuick" aria-label="Suggested amounts">
+                        <button type="button" class="donateChip" data-donate-amt="10">$10</button>
+                        <button type="button" class="donateChip" data-donate-amt="25">$25</button>
+                        <button type="button" class="donateChip" data-donate-amt="50">$50</button>
+                        <button type="button" class="donateChip" data-donate-amt="100">$100</button>
+                      </div>
+
+                      <button type="button" class="prettyBtn donateCheckoutBtn w-100" id="donateCheckoutBtn">
+                        Continue to secure checkout
+                      </button>
+                      <p id="donateMsg" class="donateMsg" role="status"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="aboutSection" aria-labelledby="resources-title" data-aos="fade-up" data-aos-duration="450">
+          <div class="container-xl">
+            <div class="infoCard">
+              <div class="sectionIntro centeredIntro" data-aos="fade-down" data-aos-delay="40">
+                <p class="eyebrow">Project documents</p>
+                <h2 class="sectionTitle" id="resources-title">Resources</h2>
+                <p class="sectionText">
+                  Supporting documents related to research, development, and project documentation.
+                </p>
+              </div>
+
+              <div class="linkCardGrid">
+                <a href="https://drive.google.com/file/d/1NpXKrp7BziyIzVWnqtRQgbSpTPyelJu-/view?usp=sharing"
+                  target="_blank" rel="noopener noreferrer" class="docCard" data-aos="zoom-in-up" data-aos-delay="80">
+                  <div class="docIcon"><i class="bi bi-journal-text" aria-hidden="true"></i></div>
+                  <h3>Works Cited</h3>
+                  <p>Sources and references used to build the platform.</p>
+                </a>
+
+                <a href="https://drive.google.com/file/d/1gpa1Uj7WG07cVHgApVUdwLPeHl3SBplP/view?usp=sharing"
+                  target="_blank" rel="noopener noreferrer" class="docCard" data-aos="zoom-in-up" data-aos-delay="120">
+                  <div class="docIcon"><i class="bi bi-check2-square" aria-hidden="true"></i></div>
+                  <h3>Student Copyright Checklist</h3>
+                  <p>Documentation of copyright and use compliance.</p>
+                </a>
+
+                <a href="https://drive.google.com/file/d/1v_VNSZbJJi0a1Mnaq7Z1j8oGkdI5de6p/view?usp=sharing"
+                  target="_blank" rel="noopener noreferrer" class="docCard" data-aos="zoom-in-up" data-aos-delay="160">
+                  <div class="docIcon"><i class="bi bi-clock-history" aria-hidden="true"></i></div>
+                  <h3>Work Log</h3>
+                  <p>A record of progress, planning, and project development.</p>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="aboutSection" aria-labelledby="frameworks-title" data-aos="fade-up" data-aos-duration="450">
+          <div class="container-xl">
+            <div class="infoCard frameworkCard">
+              <div class="sectionIntro centeredIntro" data-aos="fade-down" data-aos-delay="40">
+                <h2 class="sectionTitle" id="frameworks-title">Frameworks</h2>
+              </div>
+
+              <div class="frameworkBlock" data-aos="fade-up" data-aos-delay="110">
+                <div class="frameworkBadge">Bootstrap</div>
+                <p class="sectionText frameworkText">
+                  The MIT License (MIT) Copyright (c) 2011–2018 Twitter, Inc.
+                  and The Bootstrap Authors. Permission is hereby granted, free of
+                  charge, to any person obtaining a copy of this software and
+                  associated documentation files (the “Software”), to deal in the
+                  Software without restriction, including without limitation the
+                  rights to use, copy, modify, merge, publish, distribute, sublicense,
+                  and/or sell copies of the Software, and to permit persons to
+                  whom the Software is furnished to do so, subject to the following
+                  conditions: The above copyright notice and this permission notice
+                  shall be included in all copies or substantial portions of the Software.
+                  THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND.
+                </p>
+                <p class="frameworkNote">
+                  The content on this website has been built using framework systems,
+                  but the template and theme were built by the builder.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container-xl footerShell">
+      <div class="footerTop row gy-5">
+        <div class="col-lg-5 col-md-12">
+          <div class="footerBrandCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="60">
+            <img src="./assets/images/bgLogo.png" alt="Atlas Hub logo" class="footerLogo">
+            <h3 class="footerBrandTitle">Atlas Hub</h3>
+            <p class="footerBrandText">
+              Connecting communities with trusted local resources — making help easier to find when it matters most.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="100">
+            <h5 class="footerTitle">Useful Links</h5>
+            <ul class="footerLinks">
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./about.html">About</a></li>
+              <li><a href="./resources.html">Resources</a></li>
+              <li><a href="./events.html">Events</a></li>
+              <li><a href="./submit.html">Submit a Resource</a></li>
+              <li><a href="./about.html#donate">Donate</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+          <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="140">
+            <h5 class="footerTitle">Contact</h5>
+            <div class="footerContactList">
+              <p class="footerContactItem">
+                <i class="bi bi-geo-alt"></i>
+                <span>Chester Springs, PA Hub</span>
+              </p>
+
+              <a href="about.html" rel="noopener noreferrer" class="footerContactLink">
+                <i class="bi bi-chat-dots"></i>
+                <span>Feedback Form</span>
+              </a>
+
+              <a href="mailto:atlashubprofessional@gmail.com" class="footerContactLink">
+                <i class="bi bi-envelope"></i>
+                <span>atlashubprofessional@gmail.com</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footerBottomBar">
+        <p class="footerCopyright">© 2026 Atlas Hub. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered auth-modal-dialog">
+      <div class="modal-content auth-modal-shell border-0 shadow">
+        <button type="button" class="btn-close auth-modal-dismiss" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="auth-modal-logo-ring" aria-hidden="true">
+          <img src="./assets/images/symbol.png" alt="" width="52" height="52">
+        </div>
+        <div class="modal-body auth-modal-body">
+          <h2 class="auth-modal-title" id="authModalTitle">Atlas Hub Community Access</h2>
+          <p class="auth-modal-subtitle">Please sign in or create an account.</p>
+
+          <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
+            <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab"
+              aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
+            <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab"
+              aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
+          </div>
+
+          <form id="authModalForm" class="auth-modal-form" novalidate>
+            <div class="auth-modal-panel" data-auth-panel="signin" id="authPanelSignIn" role="tabpanel">
+              <h3 class="auth-modal-section-title">Account Sign In</h3>
+            </div>
+            <div class="auth-modal-panel d-none" data-auth-panel="signup" id="authPanelSignUp" role="tabpanel">
+              <h3 class="auth-modal-section-title">Create Account</h3>
+            </div>
+
+            <div id="authNameWrap" class="auth-modal-field d-none">
+              <label class="auth-modal-label" for="authModalName">Full name</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-person-fill auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalName" class="auth-modal-input form-control border-0 shadow-none" type="text"
+                  autocomplete="name" placeholder="Your full name">
+              </div>
+            </div>
+
+            <div class="auth-modal-field">
+              <label class="auth-modal-label" for="authModalEmail">Email Address</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalEmail" class="auth-modal-input form-control border-0 shadow-none" type="email"
+                  autocomplete="email" required placeholder="you@example.com">
+              </div>
+            </div>
+
+            <div id="authForgotRow" class="auth-modal-forgot-row">
+              <span class="auth-modal-forgot-spacer" aria-hidden="true"></span>
+              <a href="#" class="auth-modal-forgot" id="authForgotPasswordLink">Forgot Password?</a>
+            </div>
+
+            <div class="auth-modal-field">
+              <label class="auth-modal-label" for="authModalPassword">Password</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalPassword" class="auth-modal-input form-control border-0 shadow-none" type="password"
+                  autocomplete="current-password" required placeholder="Enter password">
+              </div>
+            </div>
+
+            <div id="authAdminRow" class="auth-modal-admin-row">
+              <div class="form-check form-switch auth-modal-switch">
+                <input class="form-check-input" type="checkbox" id="authAdminToggle" role="switch">
+                <label class="form-check-label auth-modal-switch-label" for="authAdminToggle">Login as admin Include
+                  Administrator Access</label>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-modal-submit" id="authModalSubmitBtn">Sign In</button>
+            <button type="button" class="auth-modal-submit auth-modal-submit--signup d-none" id="authSignupBtn">Create
+              Account</button>
+
+            <button type="button" class="auth-modal-logout d-none" id="authLogoutBtn">Log out</button>
+
+            <div id="authModalMsg" class="auth-modal-msg" role="status"></div>
+
+            <p class="auth-modal-footer-hint" id="authModalFooterHint">Don't have an account? Use the tab above to
+              create one.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="donateSuccessModal" tabindex="-1" aria-labelledby="donateSuccessModalTitle"
+    aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered donate-success-modal-dialog">
+      <div class="modal-content donate-success-modal-shell border-0 shadow">
+        <div class="modal-body donate-success-modal-body text-center">
+          <div class="donate-success-modal-icon-wrap" aria-hidden="true">
+            <i class="bi bi-heart-fill"></i>
+          </div>
+          <h2 class="donate-success-modal-title" id="donateSuccessModalTitle">Thank you for donating</h2>
+          <p class="donate-success-modal-lead">
+            Your payment was submitted through Stripe. If it succeeded, your support will show as completed shortly.
+          </p>
+          <p class="donate-success-modal-footnote" id="donateSuccessRedirectHint">
+            Returning you to About in a few seconds…
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+    integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+    crossorigin="anonymous"></script>
+  <script src="./assets/scripts/chat.js"></script>
+  <script src="./assets/scripts/env.js"></script>
+  <script src="./assets/scripts/auth.js"></script>
+  <script src="./assets/scripts/donate.js"></script>
+  <script src="./assets/scripts/email.js"></script>
+  <script src="./assets/scripts/loader.js"></script>
+  <script src="./assets/scripts/navbar-scroll.js"></script>
+  <script src="./assets/scripts/navbar-collapse-mobile.js"></script>
+</body>
+
+</html>
