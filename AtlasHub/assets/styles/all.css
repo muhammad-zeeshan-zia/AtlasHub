@@ -981,6 +981,7 @@ body::after {
 .button-shape-nav .nav-link {
   padding: 0.55rem 0.95rem !important;
   border-radius: 999px !important;
+  white-space: nowrap;
 }
 
 .button-shape-nav:hover {
@@ -999,6 +1000,7 @@ body::after {
 .nav-link {
   color: var(--atlas-text) !important;
   font-weight: 600 !important;
+  white-space: nowrap;
 }
 
 .nav-link:hover,
