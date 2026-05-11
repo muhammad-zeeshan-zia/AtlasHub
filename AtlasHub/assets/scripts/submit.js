@@ -14,46 +14,164 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let resourceMap = null;
   let resourceMarker = null;
+  let resourceAutocomplete = null;
+  let resourceGeocoder = null;
+  let googleRef = null;
 
-  const DEFAULT_MAP_CENTER = [39.96, -75.75];
+  const DEFAULT_MAP_CENTER = { lat: 39.96, lng: -75.75 };
   const DEFAULT_MAP_ZOOM = 10;
 
   const clearResourceMapPin = () => {
     if (latInput) latInput.value = '';
     if (lngInput) lngInput.value = '';
-    if (resourceMap && resourceMarker) {
-      resourceMap.removeLayer(resourceMarker);
+    if (resourceMarker) {
+      resourceMarker.setMap(null);
       resourceMarker = null;
     }
     if (resourceMap) {
-      resourceMap.setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM);
+      resourceMap.setCenter(DEFAULT_MAP_CENTER);
+      resourceMap.setZoom(DEFAULT_MAP_ZOOM);
     }
   };
 
-  const syncMapCoords = (latlng) => {
-    if (!latInput || !lngInput || !latlng) return;
-    latInput.value = latlng.lat.toFixed(6);
-    lngInput.value = latlng.lng.toFixed(6);
+  const syncMapCoords = (lat, lng) => {
+    if (!latInput || !lngInput) return;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    latInput.value = Number(lat).toFixed(6);
+    lngInput.value = Number(lng).toFixed(6);
   };
 
-  const initResourceLocationMap = () => {
-    if (!mapEl || typeof L === 'undefined') return;
-    resourceMap = L.map(mapEl).setView(DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(resourceMap);
-    resourceMap.on('click', (e) => {
-      const pt = e.latlng;
-      if (!resourceMarker) {
-        resourceMarker = L.marker(pt, { draggable: true }).addTo(resourceMap);
-        resourceMarker.on('dragend', (ev) => syncMapCoords(ev.target.getLatLng()));
-      } else {
-        resourceMarker.setLatLng(pt);
-      }
-      syncMapCoords(pt);
+  const setResourcePin = (lat, lng, { centerMap = true } = {}) => {
+    if (!resourceMap) return;
+
+    const position = { lat: Number(lat), lng: Number(lng) };
+    syncMapCoords(position.lat, position.lng);
+
+    if (!resourceMarker) {
+      resourceMarker = new googleRef.maps.Marker({
+        position,
+        map: resourceMap,
+        draggable: true
+      });
+
+      resourceMarker.addListener('dragend', () => {
+        const pos = resourceMarker?.getPosition();
+        if (!pos) return;
+        syncMapCoords(pos.lat(), pos.lng());
+      });
+    } else {
+      resourceMarker.setPosition(position);
+    }
+
+    if (centerMap) {
+      resourceMap.panTo(position);
+    }
+  };
+
+  const loadGoogleMaps = ({ apiKey, libraries = [] }) => {
+    if (window.google?.maps) return Promise.resolve(window.google);
+    if (window.__atlasGoogleMapsPromise) return window.__atlasGoogleMapsPromise;
+
+    window.__atlasGoogleMapsPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      const libs = libraries.length ? `&libraries=${encodeURIComponent(libraries.join(','))}` : '';
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}${libs}`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => resolve(window.google);
+      script.onerror = () => reject(new Error('Failed to load Google Maps API.'));
+      document.head.appendChild(script);
     });
-    setTimeout(() => resourceMap?.invalidateSize(), 350);
+
+    return window.__atlasGoogleMapsPromise;
+  };
+
+  const initAtlasResourceLocationMap = async () => {
+    if (!mapEl || !window.ATLAS_GOOGLE_MAPS_API_KEY) return;
+    if (window.ATLAS_GOOGLE_MAPS_API_KEY === 'YOUR_GOOGLE_MAPS_API_KEY') return;
+
+    const google = await loadGoogleMaps({
+      apiKey: window.ATLAS_GOOGLE_MAPS_API_KEY,
+      libraries: ['places']
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn(err);
+      return null;
+    });
+
+    if (!google?.maps) return;
+
+    googleRef = google;
+    resourceGeocoder = new google.maps.Geocoder();
+
+    resourceMap = new google.maps.Map(mapEl, {
+      center: DEFAULT_MAP_CENTER,
+      zoom: DEFAULT_MAP_ZOOM,
+      mapTypeControl: false
+    });
+
+    resourceMap.addListener('click', (e) => {
+      const lat = e?.latLng?.lat?.();
+      const lng = e?.latLng?.lng?.();
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+      setResourcePin(lat, lng, { centerMap: true });
+    });
+
+    const addressInput = document.getElementById('address');
+    if (addressInput && google.maps.places?.Autocomplete) {
+      resourceAutocomplete = new google.maps.places.Autocomplete(addressInput, {
+        types: ['address'],
+        fields: ['geometry', 'formatted_address']
+      });
+
+      resourceAutocomplete.addListener('place_changed', () => {
+        const place = resourceAutocomplete?.getPlace?.();
+        const loc = place?.geometry?.location;
+        if (!loc) return;
+
+        const lat = loc.lat();
+        const lng = loc.lng();
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+        if (place.formatted_address) addressInput.value = place.formatted_address;
+        setResourcePin(lat, lng, { centerMap: true });
+      });
+    }
+
+    // Optional: if the user types an address and leaves the field,
+    // geocode it and place the pin (autocomplete already handles click selection).
+    if (addressInput && resourceGeocoder) {
+      let geocodeBusy = false;
+      const tryGeocodeTypedAddress = () => {
+        if (geocodeBusy) return;
+        const typed = (addressInput.value || "").trim();
+        if (!typed) return;
+
+        const latExisting = (latInput?.value || "").trim();
+        const lngExisting = (lngInput?.value || "").trim();
+        if (latExisting && lngExisting) return;
+
+        geocodeBusy = true;
+        resourceGeocoder.geocode({ address: typed }, (results, status) => {
+          geocodeBusy = false;
+          if (status !== "OK" || !Array.isArray(results) || !results[0]?.geometry?.location) return;
+
+          const loc = results[0].geometry.location;
+          setResourcePin(loc.lat(), loc.lng(), { centerMap: true });
+        });
+      };
+
+      addressInput.addEventListener("keydown", (ev) => {
+        if (ev.key !== "Enter") return;
+        ev.preventDefault();
+        tryGeocodeTypedAddress();
+      });
+
+      addressInput.addEventListener("blur", () => {
+        // Delay slightly so place selection (autocomplete) can update coords first.
+        setTimeout(tryGeocodeTypedAddress, 150);
+      });
+    }
   };
 
   clearMapPinBtn?.addEventListener('click', clearResourceMapPin);
@@ -287,5 +405,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   addSection();
-  initResourceLocationMap();
+  initAtlasResourceLocationMap();
 });

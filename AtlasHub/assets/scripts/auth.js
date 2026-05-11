@@ -17,6 +17,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const authForgotLink = document.getElementById("authForgotPasswordLink");
   const authFooterHint = document.getElementById("authModalFooterHint");
   const authForgotRow = document.getElementById("authForgotRow");
+  const authMainFields = document.getElementById("authMainFields");
+  const authOtpPanel = document.getElementById("authOtpPanel");
+  const authForgotPanel = document.getElementById("authForgotPanel");
+  const authModalSubtitle = document.getElementById("authModalSubtitle");
+  const authOtpTitle = document.getElementById("authOtpTitle");
+  const authOtpLead = document.getElementById("authOtpLead");
+  const authModalOtp = document.getElementById("authModalOtp");
+  const authVerifyOtpBtn = document.getElementById("authVerifyOtpBtn");
+  const authResendOtpBtn = document.getElementById("authResendOtpBtn");
+  const authOtpBackBtn = document.getElementById("authOtpBackBtn");
+  const authForgotStep1 = document.getElementById("authForgotStep1");
+  const authForgotStep2 = document.getElementById("authForgotStep2");
+  const authForgotEmail = document.getElementById("authForgotEmail");
+  const authForgotOtp = document.getElementById("authForgotOtp");
+  const authForgotNewPassword = document.getElementById("authForgotNewPassword");
+  const authForgotConfirmPassword = document.getElementById("authForgotConfirmPassword");
+  const authForgotSendBtn = document.getElementById("authForgotSendBtn");
+  const authForgotResetBtn = document.getElementById("authForgotResetBtn");
+  const authForgotBackBtn = document.getElementById("authForgotBackBtn");
 
   if (!authOpenBtn) return;
 
@@ -27,6 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let sidebarBackdropEl = null;
   let sidebarEl = null;
   let sidebarLogoutBound = false;
+
+  /** @type {null | 'signup' | 'login'} */
+  let otpMode = null;
+  /** @type {{ name: string, email: string, password: string } | null} */
+  let pendingSignup = null;
+  /** @type {{ email: string, password: string, role: string } | null} */
+  let pendingLogin = null;
+
+  const defaultSubtitle = "Please sign in or create an account.";
 
   const escapeHtml = (value) => {
     const div = document.createElement("div");
@@ -41,6 +69,30 @@ document.addEventListener("DOMContentLoaded", () => {
       return (parts[0][0] + parts[1][0]).toUpperCase().slice(0, 2);
     }
     return name.trim().slice(0, 2).toUpperCase() || "?";
+  };
+
+  const parseJson = async (response) => {
+    try {
+      return await response.json();
+    } catch (_e) {
+      return {};
+    }
+  };
+
+  const setLoadingState = (button, loadingLabel) => {
+    if (!button) return { button, previousLabel: null };
+    const previousLabel = button.textContent;
+    button.disabled = true;
+    button.classList.add("auth-modal-btn-loading");
+    if (loadingLabel) button.textContent = loadingLabel;
+    return { button, previousLabel };
+  };
+
+  const clearLoadingState = ({ button, previousLabel }) => {
+    if (!button) return;
+    button.disabled = false;
+    button.classList.remove("auth-modal-btn-loading");
+    if (previousLabel != null) button.textContent = previousLabel;
   };
 
   const ensureUserSidebar = () => {
@@ -136,6 +188,62 @@ document.addEventListener("DOMContentLoaded", () => {
     authOpenBtn.setAttribute("aria-expanded", "false");
   };
 
+  const showMainAuthView = () => {
+    otpMode = null;
+    pendingSignup = null;
+    pendingLogin = null;
+    authMainFields?.classList.remove("d-none");
+    authOtpPanel?.classList.add("d-none");
+    authForgotPanel?.classList.add("d-none");
+    authForgotStep1?.classList.remove("d-none");
+    authForgotStep2?.classList.add("d-none");
+    if (authModalOtp) authModalOtp.value = "";
+    if (authForgotOtp) authForgotOtp.value = "";
+    if (authForgotNewPassword) authForgotNewPassword.value = "";
+    if (authForgotConfirmPassword) authForgotConfirmPassword.value = "";
+    if (authModalSubtitle) authModalSubtitle.textContent = defaultSubtitle;
+    authFooterHint?.classList.remove("d-none");
+    if (authModalTabsRoot) syncAuthModalUi();
+  };
+
+  const showOtpView = (mode, leadText) => {
+    otpMode = mode;
+    authMainFields?.classList.add("d-none");
+    authOtpPanel?.classList.remove("d-none");
+    authForgotPanel?.classList.add("d-none");
+    if (authOtpTitle) {
+      authOtpTitle.textContent =
+        mode === "signup" ? "Finish creating your account" : "Verify your sign-in";
+    }
+    if (authOtpLead) authOtpLead.textContent = leadText || "";
+    if (authModalOtp) authModalOtp.value = "";
+    authFooterHint?.classList.add("d-none");
+    if (authModalSubtitle) {
+      authModalSubtitle.textContent = "Enter the code we emailed you.";
+    }
+  };
+
+  const showForgotView = () => {
+    otpMode = null;
+    pendingSignup = null;
+    pendingLogin = null;
+    authMainFields?.classList.add("d-none");
+    authOtpPanel?.classList.add("d-none");
+    authForgotPanel?.classList.remove("d-none");
+    authForgotStep1?.classList.remove("d-none");
+    authForgotStep2?.classList.add("d-none");
+    if (authForgotEmail && authEmail) {
+      authForgotEmail.value = authEmail.value.trim();
+    }
+    authFooterHint?.classList.add("d-none");
+    if (authModalSubtitle) authModalSubtitle.textContent = "Reset your password.";
+  };
+
+  const showForgotStep2 = () => {
+    authForgotStep1?.classList.add("d-none");
+    authForgotStep2?.classList.remove("d-none");
+  };
+
   const syncAuthModalUi = () => {
     if (!authModalTabsRoot) return;
     const isSignup = authActiveTab === "signup";
@@ -169,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
       else authSignupBtn.classList.add("d-none");
     }
 
-    if (authFooterHint) {
+    if (authFooterHint && !otpMode && authForgotPanel?.classList.contains("d-none")) {
       authFooterHint.textContent = isSignup
         ? "Already have an account? Use Sign In above."
         : "Don't have an account? Use the tab above to create one.";
@@ -239,6 +347,13 @@ document.addEventListener("DOMContentLoaded", () => {
     authMsg.style.color = isError ? "#b42318" : "#17613a";
   };
 
+  authModalEl?.addEventListener("hidden.bs.modal", () => {
+    showMainAuthView();
+    setMsg("");
+    authActiveTab = "signin";
+    if (authModalTabsRoot) syncAuthModalUi();
+  });
+
   authOpenBtn.addEventListener("click", () => {
     const session = getSession();
     if (session?.user) {
@@ -251,6 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setMsg("");
+    showMainAuthView();
     if (authModalTabsRoot) {
       authActiveTab = "signin";
       syncAuthModalUi();
@@ -266,6 +382,82 @@ document.addEventListener("DOMContentLoaded", () => {
 
   authForgotLink?.addEventListener("click", (event) => {
     event.preventDefault();
+    setMsg("");
+    showForgotView();
+  });
+
+  authOtpBackBtn?.addEventListener("click", () => {
+    setMsg("");
+    showMainAuthView();
+  });
+
+  authForgotBackBtn?.addEventListener("click", () => {
+    setMsg("");
+    if (authForgotStep2 && !authForgotStep2.classList.contains("d-none")) {
+      authForgotStep2.classList.add("d-none");
+      authForgotStep1?.classList.remove("d-none");
+      return;
+    }
+    showMainAuthView();
+  });
+
+  authForgotSendBtn?.addEventListener("click", async () => {
+    const loading = setLoadingState(authForgotSendBtn, "Sending code...");
+    try {
+      const email = authForgotEmail?.value?.trim();
+      if (!email) {
+        setMsg("Enter your email.", true);
+        return;
+      }
+      const response = await fetch(`${API_BASE}/users/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+      const data = await parseJson(response);
+      if (!response.ok) throw new Error(data.message || "Request failed.");
+      setMsg(data.message || "If an account exists, we sent a code.", false);
+      showForgotStep2();
+    } catch (error) {
+      setMsg(error.message, true);
+    } finally {
+      clearLoadingState(loading);
+    }
+  });
+
+  authForgotResetBtn?.addEventListener("click", async () => {
+    const loading = setLoadingState(authForgotResetBtn, "Updating...");
+    try {
+      const email = authForgotEmail?.value?.trim();
+      const otp = authForgotOtp?.value?.trim();
+      const newPassword = authForgotNewPassword?.value || "";
+      const confirm = authForgotConfirmPassword?.value || "";
+      if (!email || !otp) {
+        setMsg("Email and verification code are required.", true);
+        return;
+      }
+      if (newPassword.length < 8) {
+        setMsg("Password must be at least 8 characters.", true);
+        return;
+      }
+      if (newPassword !== confirm) {
+        setMsg("Passwords do not match.", true);
+        return;
+      }
+      const response = await fetch(`${API_BASE}/users/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp, newPassword })
+      });
+      const data = await parseJson(response);
+      if (!response.ok) throw new Error(data.message || "Reset failed.");
+      setMsg(data.message || "Password updated.", false);
+      showMainAuthView();
+    } catch (error) {
+      setMsg(error.message, true);
+    } finally {
+      clearLoadingState(loading);
+    }
   });
 
   authModalTabsRoot?.querySelectorAll("[data-auth-tab]").forEach((btn) => {
@@ -289,6 +481,115 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  authVerifyOtpBtn?.addEventListener("click", async () => {
+    const loading = setLoadingState(authVerifyOtpBtn, "Verifying...");
+    try {
+      const otp = authModalOtp?.value?.trim();
+      if (!otp) {
+        setMsg("Enter the verification code.", true);
+        return;
+      }
+
+      if (otpMode === "signup" && pendingSignup) {
+        const response = await fetch(`${API_BASE}/users/signup/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: pendingSignup.email,
+            otp,
+            name: pendingSignup.name,
+            password: pendingSignup.password
+          })
+        });
+        const data = await parseJson(response);
+        if (!response.ok) throw new Error(data.message || "Verification failed.");
+        setSession(data);
+        refreshAuthButton();
+        setMsg("Account verified. Welcome!");
+        showMainAuthView();
+        setTimeout(() => modal?.hide(), 600);
+        return;
+      }
+
+      if (otpMode === "login" && pendingLogin) {
+        const response = await fetch(`${API_BASE}/users/login/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: pendingLogin.email,
+            otp,
+            role: pendingLogin.role
+          })
+        });
+        const data = await parseJson(response);
+        if (!response.ok) throw new Error(data.message || "Verification failed.");
+        setSession(data);
+        refreshAuthButton();
+        setMsg("Signed in successfully.");
+        showMainAuthView();
+        setTimeout(() => modal?.hide(), 500);
+        return;
+      }
+
+      setMsg("Something went wrong. Go back and try again.", true);
+    } catch (error) {
+      setMsg(error.message, true);
+    } finally {
+      clearLoadingState(loading);
+    }
+  });
+
+  authResendOtpBtn?.addEventListener("click", async () => {
+    const loading = setLoadingState(authResendOtpBtn, "Resending...");
+    try {
+      if (otpMode === "signup" && pendingSignup) {
+        const response = await fetch(`${API_BASE}/users/signup/request`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: pendingSignup.name,
+            email: pendingSignup.email,
+            password: pendingSignup.password
+          })
+        });
+        const data = await parseJson(response);
+        if (!response.ok) throw new Error(data.message || "Could not resend.");
+        setMsg(data.message || "A new code was sent.", false);
+        return;
+      }
+
+      if (otpMode === "login" && pendingLogin) {
+        const response = await fetch(`${API_BASE}/users/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: pendingLogin.email,
+            password: pendingLogin.password,
+            role: pendingLogin.role
+          })
+        });
+        const data = await parseJson(response);
+        if (response.ok && data.token) {
+          setSession(data);
+          refreshAuthButton();
+          setMsg("You are already verified. Signed in.");
+          showMainAuthView();
+          setTimeout(() => modal?.hide(), 500);
+          return;
+        }
+        if (response.status === 403 && data.needsOtp) {
+          setMsg(data.message || "A new code was sent.", false);
+          return;
+        }
+        throw new Error(data.message || "Could not resend.");
+      }
+    } catch (error) {
+      setMsg(error.message, true);
+    } finally {
+      clearLoadingState(loading);
+    }
+  });
+
   if (authForm) {
     authForm.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -296,6 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
         authSignupBtn?.click();
         return;
       }
+      const loading = setLoadingState(authSubmitBtn, "Signing in...");
       try {
         const payload = {
           email: authEmail.value.trim(),
@@ -308,7 +610,23 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-        const data = await response.json();
+        const data = await parseJson(response);
+
+        if (response.status === 403 && data.needsOtp) {
+          pendingLogin = {
+            email: payload.email,
+            password: payload.password,
+            role: payload.role
+          };
+          showOtpView(
+            "login",
+            data.message ||
+              "Enter the verification code we sent to your email to finish signing in."
+          );
+          setMsg("", false);
+          return;
+        }
+
         if (!response.ok) throw new Error(data.message || "Login failed.");
 
         setSession(data);
@@ -317,29 +635,42 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => modal?.hide(), 500);
       } catch (error) {
         setMsg(error.message, true);
+      } finally {
+        clearLoadingState(loading);
       }
     });
   }
 
   authSignupBtn?.addEventListener("click", async () => {
+    const loading = setLoadingState(authSignupBtn, "Creating...");
     try {
-      const response = await fetch(`${API_BASE}/users/signup`, {
+      const name = authName?.value?.trim();
+      const email = authEmail.value.trim();
+      const password = authPassword.value;
+
+      if (!name || !email || !password) {
+        setMsg("Name, email, and password are required.", true);
+        return;
+      }
+
+      const response = await fetch(`${API_BASE}/users/signup/request`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: authName?.value?.trim(),
-          email: authEmail.value.trim(),
-          password: authPassword.value
-        })
+        body: JSON.stringify({ name, email, password })
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Signup failed.");
-      setSession(data);
-      refreshAuthButton();
-      setMsg("Signup successful.");
-      setTimeout(() => modal?.hide(), 500);
+      const data = await parseJson(response);
+      if (!response.ok) throw new Error(data.message || "Could not start signup.");
+
+      pendingSignup = { name, email, password };
+      showOtpView(
+        "signup",
+        data.message || "Enter the code we emailed you to activate your account."
+      );
+      setMsg("", false);
     } catch (error) {
       setMsg(error.message, true);
+    } finally {
+      clearLoadingState(loading);
     }
   });
 

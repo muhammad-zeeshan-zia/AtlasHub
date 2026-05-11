@@ -24,9 +24,6 @@
     integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="./assets/styles/all.css">
   <link rel="stylesheet" href="./assets/styles/submit.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin="">
 
   <link rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
@@ -409,14 +406,15 @@
         </div>
         <div class="modal-body auth-modal-body">
           <h2 class="auth-modal-title" id="authModalTitle">Atlas Hub Community Access</h2>
-          <p class="auth-modal-subtitle">Please sign in or create an account.</p>
-
-          <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
-            <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab" aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
-            <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab" aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
-          </div>
+          <p class="auth-modal-subtitle" id="authModalSubtitle">Please sign in or create an account.</p>
 
           <form id="authModalForm" class="auth-modal-form" novalidate>
+            <div id="authMainFields">
+            <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
+              <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab" aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
+              <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab" aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
+            </div>
+
             <div class="auth-modal-panel" data-auth-panel="signin" id="authPanelSignIn" role="tabpanel">
               <h3 class="auth-modal-section-title">Account Sign In</h3>
             </div>
@@ -450,6 +448,11 @@
               </div>
             </div>
 
+            <div id="authForgotRow" class="auth-modal-forgot-row">
+              <span class="auth-modal-forgot-spacer"></span>
+              <a href="#" class="auth-modal-forgot" id="authForgotPasswordLink">Forgot password?</a>
+            </div>
+
             <div id="authAdminRow" class="auth-modal-admin-row">
               <div class="form-check form-switch auth-modal-switch">
                 <input class="form-check-input" type="checkbox" id="authAdminToggle" role="switch">
@@ -461,6 +464,67 @@
             <button type="button" class="auth-modal-submit auth-modal-submit--signup d-none" id="authSignupBtn">Create Account</button>
 
             <button type="button" class="auth-modal-logout d-none" id="authLogoutBtn">Log out</button>
+            </div>
+
+            <div id="authOtpPanel" class="auth-modal-secondary-flow d-none">
+              <h3 class="auth-modal-section-title" id="authOtpTitle">Verify your email</h3>
+              <p class="auth-modal-otp-lead" id="authOtpLead"></p>
+              <div class="auth-modal-field">
+                <label class="auth-modal-label" for="authModalOtp">Verification code</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-shield-lock auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalOtp" class="auth-modal-input form-control border-0 shadow-none" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
+                </div>
+              </div>
+              <button type="button" class="auth-modal-submit" id="authVerifyOtpBtn">Verify code</button>
+              <div class="auth-modal-inline-actions">
+                <button type="button" class="auth-modal-link-btn" id="authResendOtpBtn">Resend code</button>
+                <button type="button" class="auth-modal-link-btn" id="authOtpBackBtn">Back</button>
+              </div>
+            </div>
+
+            <div id="authForgotPanel" class="auth-modal-secondary-flow d-none">
+              <h3 class="auth-modal-section-title" id="authForgotTitle">Reset password</h3>
+              <div id="authForgotStep1">
+                <p class="auth-modal-otp-lead">Enter the email for your account. We will send a reset code if it exists.</p>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotEmail">Email</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotEmail" class="auth-modal-input form-control border-0 shadow-none" type="email" autocomplete="email" placeholder="you@example.com">
+                  </div>
+                </div>
+                <button type="button" class="auth-modal-submit" id="authForgotSendBtn">Send reset code</button>
+              </div>
+              <div id="authForgotStep2" class="d-none">
+                <p class="auth-modal-otp-lead">Enter the code from your email and choose a new password.</p>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotOtp">Verification code</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-shield-lock auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotOtp" class="auth-modal-input form-control border-0 shadow-none" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
+                  </div>
+                </div>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotNewPassword">New password</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotNewPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+                  </div>
+                </div>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotConfirmPassword">Confirm new password</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotConfirmPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="new-password" placeholder="Repeat password">
+                  </div>
+                </div>
+                <button type="button" class="auth-modal-submit" id="authForgotResetBtn">Update password</button>
+              </div>
+              <div class="auth-modal-inline-actions auth-modal-inline-actions--footer">
+                <button type="button" class="auth-modal-link-btn" id="authForgotBackBtn">Back to sign in</button>
+              </div>
+            </div>
 
             <div id="authModalMsg" class="auth-modal-msg" role="status"></div>
 
@@ -480,9 +544,6 @@
     crossorigin="anonymous"></script>
   <script src="./assets/scripts/env.js"></script>
   <script src="./assets/scripts/auth.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
   <script src="./assets/scripts/submit.js"></script>
   <script src="./assets/scripts/chat.js"></script>
   <script src="./assets/scripts/loader.js"></script>
