@@ -12,7 +12,7 @@ body {
   font-size: 16px;
 }
 
-.nav-link:hover {
+.navbar .nav-link:hover {
   border-bottom: 2px solid var(--third-color);
 }
 
@@ -126,7 +126,7 @@ body {
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-.nav-link:hover {
+.navbar .nav-link:hover {
   color: #ea7e57 !important;
   background: rgba(255, 255, 255, 0.35);
 }
@@ -1003,8 +1003,8 @@ body::after {
   white-space: nowrap;
 }
 
-.nav-link:hover,
-.nav-link:focus-visible {
+.navbar .nav-link:hover,
+.navbar .nav-link:focus-visible {
   color: var(--atlas-primary) !important;
   background: transparent !important;
   border-bottom: none !important;

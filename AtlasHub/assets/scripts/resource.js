@@ -168,71 +168,14 @@ document.addEventListener("DOMContentLoaded", function () {
     return Number.isFinite(n) ? n : NaN;
   };
 
-  const hasMapCoords = (item) => {
-    const lat = parseFiniteCoord(item?.latitude);
-    const lng = parseFiniteCoord(item?.longitude);
-    return Number.isFinite(lat) && Number.isFinite(lng);
-  };
-
-  const googleMapsUrl = (lat, lng) =>
-    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${lat},${lng}`)}`;
-
-  let inlineGoogleRef = null;
-  let inlineGoogleMapsPromise = null;
-  const inlineMapInstances = new Map(); // inlineMapId -> { map, marker }
-
-  const loadGoogleMaps = ({ apiKey, libraries = [] }) => {
-    if (window.google?.maps) return Promise.resolve(window.google);
-    if (inlineGoogleMapsPromise) return inlineGoogleMapsPromise;
-
-    inlineGoogleMapsPromise = new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      const libs = libraries.length ? `&libraries=${encodeURIComponent(libraries.join(","))}` : "";
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}${libs}`;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => resolve(window.google);
-      script.onerror = () => reject(new Error("Failed to load Google Maps API."));
-      document.head.appendChild(script);
-    });
-
-    return inlineGoogleMapsPromise;
-  };
-
-  const ensureInlineResourceMap = async ({ inlineMapId, lat, lng }) => {
-    const existing = inlineMapInstances.get(inlineMapId);
-    if (existing) return existing;
-
-    const apiKey = window.ATLAS_GOOGLE_MAPS_API_KEY;
-    if (!apiKey || apiKey === "YOUR_GOOGLE_MAPS_API_KEY") return null;
-
-    const google = await loadGoogleMaps({ apiKey, libraries: [] }).catch((err) => {
-      // eslint-disable-next-line no-console
-      console.warn(err);
-      return null;
-    });
-    if (!google?.maps) return null;
-
-    inlineGoogleRef = google;
-
-    const container = document.getElementById(inlineMapId);
-    if (!container) return null;
-
-    const map = new google.maps.Map(container, {
-      center: { lat: Number(lat), lng: Number(lng) },
-      zoom: 15,
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: false
-    });
-
-    const marker = new google.maps.Marker({
-      position: { lat: Number(lat), lng: Number(lng) },
-      map
-    });
-
-    inlineMapInstances.set(inlineMapId, { map, marker });
-    return { map, marker };
+  /** Driving (etc.) directions from the user's current location to the destination (Google Maps URL API). */
+  const googleMapsDirectionsFromHereUrl = (lat, lng, addressFallback) => {
+    const dest =
+      Number.isFinite(lat) && Number.isFinite(lng)
+        ? `${lat},${lng}`
+        : String(addressFallback ?? "").trim();
+    if (!dest) return "";
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
   };
 
   const renderSectionContacts = (contacts = []) =>
@@ -297,13 +240,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const sectionKeywordText = Array.isArray(item.sections)
       ? item.sections
-          .map((section) => {
-            const contactText = Array.isArray(section.contacts)
-              ? section.contacts.map((contact) => `${contact.value || ""} ${contact.note || ""}`).join(" ")
-              : "";
-            return `${section.heading || ""} ${section.footerNote || ""} ${contactText}`;
-          })
-          .join(" ")
+        .map((section) => {
+          const contactText = Array.isArray(section.contacts)
+            ? section.contacts.map((contact) => `${contact.value || ""} ${contact.note || ""}`).join(" ")
+            : "";
+          return `${section.heading || ""} ${section.footerNote || ""} ${contactText}`;
+        })
+        .join(" ")
       : "";
     wrapper.setAttribute("data-keywords", `${item.keywords || ""} ${sectionKeywordText} ${item.orgName || ""}`.trim());
 
@@ -332,10 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const mapLat = parseFiniteCoord(item.latitude);
     const mapLng = parseFiniteCoord(item.longitude);
-    const mapCoords = Number.isFinite(mapLat) && Number.isFinite(mapLng);
-
-    const hasInlineMap = hasAddress && mapCoords && Boolean(rid);
-    const inlineMapId = hasInlineMap ? `atlas-inline-map-${rid}` : "";
+    const mapsHref = hasAddress ? googleMapsDirectionsFromHereUrl(mapLat, mapLng, item.address) : "";
 
     wrapper.innerHTML = `
       <div class="cardHeaderBand resource-card-head-row">
@@ -345,53 +285,48 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="cardBody">
         <p class="resourceCardDesc">${escapeHtml(item.description)}</p>
         ${hasStructuredSections ? renderStructuredSections(item) : ""}
-        ${
-          hasAddress
-            ? `<div class="formatCard">
-                <span class="addressFormat ${hasInlineMap ? "resource-address-clickable" : ""}"
-                  ${hasInlineMap ? `role="button" tabindex="0" data-inline-map-id="${escapeHtml(inlineMapId)}" data-map-lat="${mapLat}" data-map-lng="${mapLng}" aria-expanded="false"` : ""}
-                >
-                  <i class="bi bi-geo-alt"></i> ${escapeHtml(item.address)}
+        ${hasAddress && mapsHref
+        ? `<div class="formatCard">
+                <a class="addressFormat resource-address-maps-link"
+                  href="${escapeHtml(mapsHref)}"
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <i class="bi bi-geo-alt" aria-hidden="true"></i> ${escapeHtml(item.address)}
+                </a>
+              </div>`
+        : hasAddress
+          ? `<div class="formatCard">
+                <span class="addressFormat">
+                  <i class="bi bi-geo-alt" aria-hidden="true"></i> ${escapeHtml(item.address)}
                 </span>
-              </div>
-              ${
-                hasInlineMap
-                  ? `<div class="resource-inline-map d-none" data-inline-map-root="${escapeHtml(inlineMapId)}">
-                      <div class="resource-inline-map-inner" id="${escapeHtml(inlineMapId)}"></div>
-                    </div>`
-                  : ""
-              }`
-            : ""
-        }
-        ${
-          !hasStructuredSections && hasPhone
-            ? `<div class="formatCard">
+              </div>`
+          : ""
+      }
+        ${!hasStructuredSections && hasPhone
+        ? `<div class="formatCard">
                 <a class="callButton" href="tel:${escapeHtml(toPhoneHref(item.phone))}">
                   <i class="bi bi-telephone-fill"></i> ${escapeHtml(item.phone)}
                 </a>
-                ${
-                  hasContactNote
-                    ? `<span>— <strong>${escapeHtml(contactAction)}</strong> ${escapeHtml(item.contactNote)}</span>`
-                    : `<span>— <strong>${escapeHtml(contactAction)}</strong></span>`
-                }
+                ${hasContactNote
+          ? `<span>— <strong>${escapeHtml(contactAction)}</strong> ${escapeHtml(item.contactNote)}</span>`
+          : `<span>— <strong>${escapeHtml(contactAction)}</strong></span>`
+        }
               </div>`
-            : ""
-        }
-        ${
-          !hasStructuredSections && hasHours
-            ? `<div class="smallLine mt-2"><strong>Hours:</strong> ${escapeHtml(item.hours)}</div>`
-            : ""
-        }
-        ${
-          websiteUrl
-            ? `<div class="websiteRow mt-3">
+        : ""
+      }
+        ${!hasStructuredSections && hasHours
+        ? `<div class="smallLine mt-2"><strong>Hours:</strong> ${escapeHtml(item.hours)}</div>`
+        : ""
+      }
+        ${websiteUrl
+        ? `<div class="websiteRow mt-3">
                 <span class="websiteLink"><i class="bi bi-globe2"></i> Website:</span>
                 <a class="resourceCardLink" href="${escapeHtml(websiteUrl)}" target="_blank" rel="noopener">
                   ${escapeHtml(websiteText)}
                 </a>
               </div>`
-            : ""
-        }
+        : ""
+      }
       </div>
     `;
 
@@ -507,55 +442,6 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   tabContent.addEventListener("click", async (event) => {
-    const addrTrigger = event.target.closest(".resource-address-clickable");
-    if (addrTrigger) {
-      const inlineMapId = addrTrigger.getAttribute("data-inline-map-id");
-      const lat = Number(addrTrigger.getAttribute("data-map-lat"));
-      const lng = Number(addrTrigger.getAttribute("data-map-lng"));
-
-      if (!inlineMapId || !Number.isFinite(lat) || !Number.isFinite(lng)) return;
-
-      event.preventDefault();
-
-      const root = tabContent.querySelector(`[data-inline-map-root="${inlineMapId}"]`);
-      if (!root) return;
-
-      const isOpen = !root.classList.contains("d-none");
-      if (isOpen) {
-        root.classList.add("d-none");
-        addrTrigger.setAttribute("aria-expanded", "false");
-        return;
-      }
-
-      // Close other open inline maps.
-      tabContent
-        .querySelectorAll(".resource-inline-map[data-inline-map-root]")
-        .forEach((el) => {
-          if (el !== root) el.classList.add("d-none");
-        });
-      tabContent
-        .querySelectorAll(".resource-address-clickable[aria-expanded='true']")
-        .forEach((el) => el.setAttribute("aria-expanded", "false"));
-
-      root.classList.remove("d-none");
-      addrTrigger.setAttribute("aria-expanded", "true");
-
-      const instance = await ensureInlineResourceMap({ inlineMapId, lat, lng });
-      if (!instance) {
-        // Fallback: open a Google Maps tab if API key isn't configured.
-        window.open(googleMapsUrl(lat, lng), "_blank", "noopener,noreferrer");
-        root.classList.add("d-none");
-        addrTrigger.setAttribute("aria-expanded", "false");
-        return;
-      }
-
-      if (inlineGoogleRef?.maps?.event?.trigger) {
-        inlineGoogleRef.maps.event.trigger(instance.map, "resize");
-      }
-      instance.map.setCenter({ lat, lng });
-      return;
-    }
-
     const btn = event.target.closest(".resource-bookmark-btn");
     if (!btn) return;
 
@@ -612,16 +498,6 @@ document.addEventListener("DOMContentLoaded", function () {
       alert(error.message || "Something went wrong.");
     } finally {
       btn.disabled = false;
-    }
-  });
-
-  tabContent.addEventListener("keydown", (event) => {
-    const addrTrigger = event.target.closest(".resource-address-clickable");
-    if (!addrTrigger) return;
-
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      addrTrigger.click();
     }
   });
 

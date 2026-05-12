@@ -42,67 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
     return Number.isFinite(n) ? n : NaN;
   };
 
-  const hasMapCoords = (r) => {
-    const lat = parseFiniteCoord(r?.latitude);
-    const lng = parseFiniteCoord(r?.longitude);
-    return Number.isFinite(lat) && Number.isFinite(lng);
-  };
-
-  let adminInlineGoogleRef = null;
-  let adminInlineGoogleMapsPromise = null;
-  const adminInlineMapInstances = new Map(); // inlineMapId -> { map, marker }
-
-  const loadGoogleMaps = ({ apiKey }) => {
-    if (window.google?.maps) return Promise.resolve(window.google);
-    if (adminInlineGoogleMapsPromise) return adminInlineGoogleMapsPromise;
-
-    adminInlineGoogleMapsPromise = new Promise((resolve, reject) => {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}`;
-      script.async = true;
-      script.defer = true;
-      script.onload = () => resolve(window.google);
-      script.onerror = () => reject(new Error("Failed to load Google Maps API."));
-      document.head.appendChild(script);
-    });
-
-    return adminInlineGoogleMapsPromise;
-  };
-
-  const ensureAdminInlineMap = async ({ inlineMapId, lat, lng }) => {
-    const existing = adminInlineMapInstances.get(inlineMapId);
-    if (existing) return existing;
-
-    const apiKey = window.ATLAS_GOOGLE_MAPS_API_KEY;
-    if (!apiKey || apiKey === "YOUR_GOOGLE_MAPS_API_KEY") return null;
-
-    const google = await loadGoogleMaps({ apiKey }).catch((err) => {
-      console.warn(err);
-      return null;
-    });
-    if (!google?.maps) return null;
-
-    adminInlineGoogleRef = google;
-
-    const container = document.getElementById(inlineMapId);
-    if (!container) return null;
-
-    const map = new google.maps.Map(container, {
-      center: { lat: Number(lat), lng: Number(lng) },
-      zoom: 15,
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: false
-    });
-
-    const marker = new google.maps.Marker({
-      position: { lat: Number(lat), lng: Number(lng) },
-      map
-    });
-
-    const instance = { map, marker };
-    adminInlineMapInstances.set(inlineMapId, instance);
-    return instance;
+  /** Driving (etc.) directions from the user's current location to the destination (Google Maps URL API). */
+  const googleMapsDirectionsFromHereUrl = (lat, lng, addressFallback) => {
+    const dest =
+      Number.isFinite(lat) && Number.isFinite(lng)
+        ? `${lat},${lng}`
+        : String(addressFallback ?? "").trim();
+    if (!dest) return "";
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(dest)}`;
   };
 
   const formatDate = (value) => {
@@ -166,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const renderResources = () => {
-    adminInlineMapInstances.clear();
     const visible = state.resources.filter((r) => r.status === state.currentTab);
 
     if (visible.length === 0) {
@@ -198,21 +144,24 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!r.address) return "";
           const lat = parseFiniteCoord(r.latitude);
           const lng = parseFiniteCoord(r.longitude);
-          const hasCoords = Number.isFinite(lat) && Number.isFinite(lng);
-          const inlineMapId = hasCoords ? `atlas-admin-map-${escapeHTML(r._id)}` : "";
+          const href = googleMapsDirectionsFromHereUrl(lat, lng, r.address);
+          if (!href) {
+            return `
+            <div class="admin-meta-item admin-meta-item--address">
+              <i class="bi bi-geo-alt" aria-hidden="true"></i>
+              <span class="admin-address-text">${escapeHTML(r.address)}</span>
+            </div>`;
+          }
           return `
             <div class="admin-meta-item admin-meta-item--address">
               <i class="bi bi-geo-alt" aria-hidden="true"></i>
-              <span
-                class="admin-address-text${hasCoords ? " admin-address-clickable" : ""}"
-                ${hasCoords ? `role="button" tabindex="0" aria-expanded="false" data-inline-map-id="${inlineMapId}" data-map-lat="${lat}" data-map-lng="${lng}"` : ""}
-              >${escapeHTML(r.address)}</span>
-            </div>
-            ${hasCoords ? `
-              <div class="admin-inline-map d-none" data-admin-inline-map-root="${inlineMapId}">
-                <div class="admin-inline-map-inner" id="${inlineMapId}"></div>
-              </div>` : ""}
-          `;
+              <a class="admin-address-text admin-address-maps-link"
+                 href="${escapeHTML(href)}"
+                 target="_blank"
+                 rel="noopener noreferrer">
+                ${escapeHTML(r.address)}
+              </a>
+            </div>`;
         })(),
         r.website
           ? `<div class="admin-meta-item">
@@ -384,50 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
     switchTab(tab.dataset.status);
   });
 
-  listEl.addEventListener("click", async (event) => {
-    // Inline address map toggle
-    const addrTrigger = event.target.closest(".admin-address-clickable");
-    if (addrTrigger) {
-      const inlineMapId = addrTrigger.getAttribute("data-inline-map-id");
-      const lat = Number(addrTrigger.getAttribute("data-map-lat"));
-      const lng = Number(addrTrigger.getAttribute("data-map-lng"));
-      if (!inlineMapId || !Number.isFinite(lat) || !Number.isFinite(lng)) return;
-
-      const root = listEl.querySelector(`[data-admin-inline-map-root="${inlineMapId}"]`);
-      if (!root) return;
-
-      const isOpen = !root.classList.contains("d-none");
-      if (isOpen) {
-        root.classList.add("d-none");
-        addrTrigger.setAttribute("aria-expanded", "false");
-        return;
-      }
-
-      // Close all other open admin inline maps first
-      listEl.querySelectorAll(".admin-inline-map[data-admin-inline-map-root]").forEach((el) => {
-        if (el !== root) el.classList.add("d-none");
-      });
-      listEl.querySelectorAll(".admin-address-clickable[aria-expanded='true']").forEach((el) => {
-        el.setAttribute("aria-expanded", "false");
-      });
-
-      root.classList.remove("d-none");
-      addrTrigger.setAttribute("aria-expanded", "true");
-
-      const instance = await ensureAdminInlineMap({ inlineMapId, lat, lng });
-      if (!instance) {
-        root.classList.add("d-none");
-        addrTrigger.setAttribute("aria-expanded", "false");
-        return;
-      }
-
-      if (adminInlineGoogleRef?.maps?.event?.trigger) {
-        adminInlineGoogleRef.maps.event.trigger(instance.map, "resize");
-      }
-      instance.map.setCenter({ lat, lng });
-      return;
-    }
-
+  listEl.addEventListener("click", (event) => {
     // Status change buttons
     const btn = event.target.closest(".admin-status-btn");
     if (!btn || btn.disabled) return;
@@ -435,15 +341,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const newStatus = btn.getAttribute("data-status");
     if (!id || !newStatus) return;
     setStatus(id, newStatus, btn);
-  });
-
-  listEl.addEventListener("keydown", (event) => {
-    const addrTrigger = event.target.closest(".admin-address-clickable");
-    if (!addrTrigger) return;
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      addrTrigger.click();
-    }
   });
 
   loadResources();
