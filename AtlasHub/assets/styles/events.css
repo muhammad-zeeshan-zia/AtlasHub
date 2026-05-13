@@ -778,8 +778,14 @@ body.events-page::after {
 }
 
 .events-page .chat-launcher {
-  background: linear-gradient(135deg, var(--atlas-primary), var(--atlas-accent)) !important;
+  background: var(--atlas-primary) !important;
+  color: #fff !important;
   box-shadow: 0 10px 22px rgba(59, 139, 123, 0.3);
+}
+
+.events-page .chat-launcher:hover {
+  background: #347e70 !important;
+  box-shadow: 0 14px 26px rgba(59, 139, 123, 0.34);
 }
 
 .events-page .chat-header {
