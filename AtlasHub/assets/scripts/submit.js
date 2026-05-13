@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
       address: document.getElementById('address').value || 'N/A',
       latitude,
       longitude,
-      description: document.getElementById('description').value,
+  description: document.getElementById('description').value || '',
       hours: document.getElementById('hours').value || 'N/A',
       keywords: document.getElementById('keywords').value || '',
       sections: Array.from(document.querySelectorAll('.section-block')).map((sectionEl) => ({

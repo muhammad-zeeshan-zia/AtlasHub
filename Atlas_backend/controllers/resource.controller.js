@@ -9,11 +9,11 @@ function parseCoordinate(value) {
 
 exports.submitResource = async (req, res) => {
   try {
-    const { orgName, category, description } = req.body;
+  const { orgName, category } = req.body;
 
-    if (!orgName || !category || !description) {
+  if (!orgName || !category) {
       return res.status(400).json({
-        message: "orgName, category, and description are required."
+    message: "orgName and category are required."
       });
     }
 
