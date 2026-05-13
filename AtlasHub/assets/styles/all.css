@@ -468,23 +468,30 @@ body {
   bottom: 20px;
   width: 62px;
   height: 62px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 50%;
-  background: var(--atlas-primary, #3b8b7b);
-  color: #fff;
+  background-clip: padding-box, border-box;
+  background:
+    var(--atlas-sage-fill, linear-gradient(135deg, #dcecdf 0%, #c6dcc8 35%, #aac8ad 100%)) padding-box,
+    var(--atlas-sage-edge, linear-gradient(120deg, rgba(109, 189, 166, 0.9), rgba(143, 188, 255, 0.88))) border-box;
+  color: #23453d;
   font-size: 26px;
   cursor: pointer;
-  box-shadow: 0 12px 28px rgba(82, 90, 85, 0.22);
+  box-shadow: 0 7px 16px rgba(27, 58, 50, 0.1);
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
 
 .chat-launcher:hover {
   transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 16px 30px rgba(82, 90, 85, 0.28);
+  box-shadow: 0 12px 22px rgba(20, 45, 40, 0.15);
+  filter: saturate(1.06);
+  background:
+    var(--atlas-sage-fill-hover, linear-gradient(135deg, #cde4d0 0%, #b5d2ba 40%, #97bb9f 100%)) padding-box,
+    var(--atlas-sage-edge-hover, linear-gradient(120deg, rgba(92, 171, 148, 0.95), rgba(118, 167, 244, 0.95))) border-box;
 }
 
 .chat-widget {
@@ -863,6 +870,12 @@ body {
   --atlas-gradient-border: linear-gradient(125deg, #7cc8b6 0%, #8ab7ff 45%, #f0a883 100%);
   --atlas-shadow-soft: 0 12px 28px rgba(30, 67, 58, 0.08);
   --atlas-shadow-hover: 0 18px 34px rgba(30, 67, 58, 0.14);
+
+  /* Chat floater + sage CTAs — same mint treatment as home “Explore Resources” */
+  --atlas-sage-fill: linear-gradient(135deg, #dcecdf 0%, #c6dcc8 35%, #aac8ad 100%);
+  --atlas-sage-edge: linear-gradient(120deg, rgba(109, 189, 166, 0.9), rgba(143, 188, 255, 0.88));
+  --atlas-sage-fill-hover: linear-gradient(135deg, #cde4d0 0%, #b5d2ba 40%, #97bb9f 100%);
+  --atlas-sage-edge-hover: linear-gradient(120deg, rgba(92, 171, 148, 0.95), rgba(118, 167, 244, 0.95));
 }
 
 /* Resources listings: card hover matches category tab pills (lift + shadow + tinted surface). */
@@ -1067,17 +1080,6 @@ body::after {
 .footerContactItem i,
 .footerContactLink i {
   color: var(--atlas-primary);
-}
-
-.chat-launcher {
-  background: var(--atlas-primary) !important;
-  color: #fff !important;
-  box-shadow: 0 10px 22px rgba(59, 139, 123, 0.3) !important;
-}
-
-.chat-launcher:hover {
-  background: #347e70 !important;
-  box-shadow: 0 14px 26px rgba(59, 139, 123, 0.34) !important;
 }
 
 .chat-widget {

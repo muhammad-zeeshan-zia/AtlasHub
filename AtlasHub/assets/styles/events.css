@@ -371,8 +371,20 @@ body {
 }
 
 .btn-sage {
-  background: linear-gradient(180deg, var(--color-sage-light), var(--color-sage));
-  color: #2f3526;
+  border: 1px solid transparent;
+  background-clip: padding-box, border-box;
+  background:
+    var(--atlas-sage-fill, linear-gradient(135deg, #dcecdf 0%, #c6dcc8 35%, #aac8ad 100%)) padding-box,
+    var(--atlas-sage-edge, linear-gradient(120deg, rgba(109, 189, 166, 0.9), rgba(143, 188, 255, 0.88))) border-box;
+  color: #23453d;
+  box-shadow: 0 7px 16px rgba(27, 58, 50, 0.1);
+}
+
+.btn-sage:hover {
+  background:
+    var(--atlas-sage-fill-hover, linear-gradient(135deg, #cde4d0 0%, #b5d2ba 40%, #97bb9f 100%)) padding-box,
+    var(--atlas-sage-edge-hover, linear-gradient(120deg, rgba(92, 171, 148, 0.95), rgba(118, 167, 244, 0.95))) border-box;
+  filter: saturate(1.06);
 }
 
 .btn-clay {
@@ -775,17 +787,6 @@ body.events-page::after {
 .events-page .footerLinks a:hover,
 .events-page .footerContactLink:hover {
   color: var(--atlas-primary) !important;
-}
-
-.events-page .chat-launcher {
-  background: var(--atlas-primary) !important;
-  color: #fff !important;
-  box-shadow: 0 10px 22px rgba(59, 139, 123, 0.3);
-}
-
-.events-page .chat-launcher:hover {
-  background: #347e70 !important;
-  box-shadow: 0 14px 26px rgba(59, 139, 123, 0.34);
 }
 
 .events-page .chat-header {

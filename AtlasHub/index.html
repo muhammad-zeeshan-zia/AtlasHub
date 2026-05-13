@@ -249,15 +249,15 @@
 
       .btn-sage {
         background:
-          linear-gradient(135deg, #dcecdf 0%, #c6dcc8 35%, #aac8ad 100%) padding-box,
-          linear-gradient(120deg, rgba(109, 189, 166, 0.9), rgba(143, 188, 255, 0.88)) border-box !important;
+          var(--atlas-sage-fill) padding-box,
+          var(--atlas-sage-edge) border-box !important;
         color: #23453d !important;
       }
 
       .btn-sage:hover {
         background:
-          linear-gradient(135deg, #cde4d0 0%, #b5d2ba 40%, #97bb9f 100%) padding-box,
-          linear-gradient(120deg, rgba(92, 171, 148, 0.95), rgba(118, 167, 244, 0.95)) border-box !important;
+          var(--atlas-sage-fill-hover) padding-box,
+          var(--atlas-sage-edge-hover) border-box !important;
       }
 
       .btn-clay {
@@ -383,17 +383,6 @@
       .footerLinks a:hover,
       .footerContactLink:hover {
         color: var(--atlas-primary) !important;
-      }
-
-      .chat-launcher {
-        background: var(--atlas-primary) !important;
-        color: #fff !important;
-        box-shadow: 0 10px 22px rgba(59, 139, 123, 0.3);
-      }
-
-      .chat-launcher:hover {
-        background: #347e70 !important;
-        transform: translateY(-3px) scale(1.03);
       }
 
       .chat-header {
