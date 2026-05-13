@@ -10,12 +10,12 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 # Environment variables (SENSITIVE)
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-*.env
+# .env
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
+# *.env
 
 # Build outputs
 dist/
