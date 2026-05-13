@@ -284,6 +284,36 @@
   border-radius: 12px;
 }
 
+.admin-resource-edit-row {
+  margin-top: 4px;
+}
+
+.admin-edit-resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1f6d5c;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 139, 123, 0.35);
+  background: rgba(255, 255, 255, 0.85);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-edit-resource-link:hover {
+  color: #174f44;
+  border-color: rgba(59, 139, 123, 0.55);
+  background: rgba(59, 139, 123, 0.08);
+}
+
+.admin-edit-resource-link:focus-visible {
+  outline: 2px solid rgba(59, 139, 123, 0.55);
+  outline-offset: 2px;
+}
+
 .admin-meta-item {
   display: flex;
   align-items: flex-start;

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Resource = require("../models/resource.model");
 
 function parseCoordinate(value) {
@@ -136,6 +137,99 @@ exports.getApprovedResources = async (_req, res) => {
     return res.json(resources);
   } catch (error) {
     return res.status(500).json({ message: "Failed to fetch approved resources.", error: error.message });
+  }
+};
+
+exports.getResourceByIdAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid resource id." });
+    }
+
+    const resource = await Resource.findById(id).populate("approvedBy", "name email");
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found." });
+    }
+
+    return res.json(resource);
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to fetch resource.", error: error.message });
+  }
+};
+
+exports.updateResourceByAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid resource id." });
+    }
+
+    const { orgName, category } = req.body;
+    if (!orgName || !category) {
+      return res.status(400).json({
+        message: "orgName and category are required."
+      });
+    }
+
+    const resource = await Resource.findById(id);
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found." });
+    }
+
+    const sections = Array.isArray(req.body.sections)
+      ? req.body.sections
+          .map((section) => ({
+            heading: section?.heading || "",
+            contacts: Array.isArray(section?.contacts)
+              ? section.contacts
+                  .map((contact) => ({
+                    method: contact?.method || "phone",
+                    actionLabel: contact?.actionLabel || "Call",
+                    value: contact?.value || "",
+                    note: contact?.note || ""
+                  }))
+                  .filter((contact) => contact.value)
+              : [],
+            footerNote: section?.footerNote || ""
+          }))
+          .filter((section) => section.heading || section.contacts.length || section.footerNote)
+      : [];
+
+    const latRaw = parseCoordinate(req.body.latitude);
+    const lngRaw = parseCoordinate(req.body.longitude);
+    let latitude = null;
+    let longitude = null;
+    if (latRaw != null && lngRaw != null) {
+      latitude = latRaw;
+      longitude = lngRaw;
+    } else if (latRaw != null || lngRaw != null) {
+      return res.status(400).json({
+        message: "Pick a full location on the map (both latitude and longitude), or clear the pin."
+      });
+    }
+
+    resource.orgName = String(orgName).trim();
+    resource.category = String(category).trim();
+    resource.website = String(req.body.website || "").trim() || "N/A";
+    resource.phone = String(req.body.phone || "").trim() || "N/A";
+    resource.address = String(req.body.address || "").trim() || "N/A";
+    resource.description = String(req.body.description || "").trim() || "";
+    resource.hours = String(req.body.hours || "").trim() || "N/A";
+    resource.keywords = String(req.body.keywords || "").trim() || "";
+    resource.sections = sections;
+    resource.latitude = latitude;
+    resource.longitude = longitude;
+
+    await resource.save();
+    await resource.populate("approvedBy", "name email");
+
+    return res.json({
+      message: "Resource updated successfully.",
+      resource
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to update resource.", error: error.message });
   }
 };
 

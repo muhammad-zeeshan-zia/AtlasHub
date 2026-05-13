@@ -260,20 +260,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const hasStructuredSections = Array.isArray(item.sections) && item.sections.length > 0;
 
     const session = getSession();
-  // Bookmark/Save button disabled (requested).
-  // const showBookmark = Boolean(rid && session?.token);
-  // const bookmarkSaved = rid && savedIds.has(rid);
-  // const bookmarkHtml = showBookmark
-  //   ? `<button type="button"
-  //       class="resource-bookmark-btn"
-  //       data-resource-id="${escapeHtml(rid)}"
-  //       aria-label="${bookmarkSaved ? "Remove saved resource" : "Save resource"}"
-  //       aria-pressed="${bookmarkSaved ? "true" : "false"}"
-  //       title="${bookmarkSaved ? "Saved — click to remove" : "Save resource"}">
-  //       <i class="bi ${bookmarkSaved ? "bi-bookmark-fill" : "bi-bookmark"}" aria-hidden="true"></i>
-  //     </button>`
-  //   : "";
-  const bookmarkHtml = "";
+    // Bookmark/Save button disabled (requested).
+    // const showBookmark = Boolean(rid && session?.token);
+    // const bookmarkSaved = rid && savedIds.has(rid);
+    // const bookmarkHtml = showBookmark
+    //   ? `<button type="button"
+    //       class="resource-bookmark-btn"
+    //       data-resource-id="${escapeHtml(rid)}"
+    //       aria-label="${bookmarkSaved ? "Remove saved resource" : "Save resource"}"
+    //       aria-pressed="${bookmarkSaved ? "true" : "false"}"
+    //       title="${bookmarkSaved ? "Saved — click to remove" : "Save resource"}">
+    //       <i class="bi ${bookmarkSaved ? "bi-bookmark-fill" : "bi-bookmark"}" aria-hidden="true"></i>
+    //     </button>`
+    //   : "";
+    const bookmarkHtml = "";
 
     const mapLat = parseFiniteCoord(item.latitude);
     const mapLng = parseFiniteCoord(item.longitude);
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>`
         : ""
       }
-        ${!hasStructuredSections && hasHours
+        ${hasHours
         ? `<div class="smallLine mt-2"><strong>Hours:</strong> ${escapeHtml(item.hours)}</div>`
         : ""
       }

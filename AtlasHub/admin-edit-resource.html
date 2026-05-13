@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Resource — Atlas Hub</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.2/font/bootstrap-icons.min.css"
+    integrity="sha512-D1liES3uvDpPrgk7vXR/hR/sukGn7EtDWEyvpdLsyalQYq6v6YUsTUJmku7B4rcuQ21rf0UTksw2i/2Pdjbd3g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
+    integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="./assets/styles/all.css">
+  <link rel="stylesheet" href="./assets/styles/submit.css">
+
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css"
+    integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" type="image/x-icon" href="./assets/images/symbol.png">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">
+  (function () {
+    emailjs.init({
+      publicKey: "Uy2MxOgQlI0tl8_Yk",
+    });
+  })();
+</script>
+</head>
+
+<body class="submit-page admin-resource-edit-page">
+
+  <button class="chat-launcher" id="chatLauncher" aria-label="Open Atlas Hub chat">💬</button>
+
+  <div class="chat-widget" id="chatWidget" aria-live="polite">
+    <div class="chat-header">
+      <div class="chat-header-top">
+        <div class="chat-title-wrap">
+          <div class="chat-avatar">🌿</div>
+          <div>
+            <p class="chat-title">Atlas Hub Support</p>
+             
+          </div>
+        </div>
+        <button class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+      </div>
+      <div class="chat-subtitle">
+        Ask about resources, events, contact info, feedback, or how to use Atlas Hub.
+      </div>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <div class="message-row bot">
+        <div class="message-bubble">
+          Hi! Welcome to Atlas Hub. I can help you find resources, events, contact information, or guide you to the right page.
+        </div>
+      </div>
+
+      <div class="quick-replies">
+        <button type="button" class="quick-btn" data-quick-resources="open">Resources</button>
+        <button class="quick-btn">Events</button>
+        <button class="quick-btn">Contact</button>
+        <button class="quick-btn">Submit Resource</button>
+        <button class="quick-btn">Feedback</button>
+        <button class="quick-btn">Emergency Help</button>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <div class="chat-input-wrap">
+        <input
+          type="text"
+          id="userInput"
+          class="chat-input"
+          placeholder="Ask about resources, events, or support..."
+        />
+        <button class="send-btn" id="sendBtn" aria-label="Send message">➤</button>
+      </div>
+    </div>
+  </div>
+  <div class="webpage">
+    <div class="my-loader-body">
+      <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+      <header class="Header">
+        <nav class="navbar fixed-top navbar-expand-lg nav-background" aria-label="Main navigation">
+          <div class="container-fluid px-md-5 d-flex justify-content-between mx-md-5">
+            <a href="index.html" class="navbar-brand" data-aos="fade-down" data-aos-duration="500">
+              <img class="logo" src="./assets/images/bgLogo.png"
+                   alt="Atlas Hub logo"
+                   width="70" height="70">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent"
+                 data-aos="fade-down" data-aos-duration="500" data-aos-delay="40">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./index.html">Home</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./about.html">About</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./resources.html">Resources</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./events.html">Events</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <a class="nav-link" href="./submit.html">Submit Resource</a>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav d-none" data-admin-review-nav>
+                  <a class="nav-link active" aria-current="page" href="./admin-review.html">Admin Review</a>
+                </li>
+                <li class="nav-item dropdown mx-1 first-nav-button home button-shape-nav nav-emergency-dropdown align-self-center">
+                  <button type="button"
+                          class="nav-link dropdown-toggle atlas-emergency-toggle"
+                          id="emergencyNavDropdown"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          aria-haspopup="true">
+                    Emergency
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end atlas-emergency-menu shadow-sm" aria-labelledby="emergencyNavDropdown">
+                    <li>
+                      <a class="dropdown-item atlas-emergency-item" href="tel:911">
+                        <strong>911</strong>
+                        <span class="d-block small text-muted">Medical, fire, or life-threatening emergency</span>
+                      </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <a class="dropdown-item atlas-emergency-item" href="tel:988">
+                        <strong>988</strong>
+                        <span class="d-block small text-muted">Suicide &amp; Crisis Lifeline</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item mx-1 first-nav-button home button-shape-nav">
+                  <button class="nav-link btn btn-link p-0 border-0" id="openAuthModalBtn" type="button">Login</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main-content" class="mainContent mainContent1">
+        <section class="resourceCard" aria-labelledby="submit-title">
+          <div class="cardHeaderBand"
+               data-aos="fade-up"
+               data-aos-duration="500"
+               data-aos-delay="40">
+            <h1 class="resourceCardTitle" id="submit-title">
+              Edit resource
+            </h1>
+          </div>
+
+          <div class="cardBody"
+               data-aos="fade-up"
+               data-aos-duration="500"
+               data-aos-delay="80">
+            <p class="resourceCardDesc mb-2">
+              Update this listing using the same fields as public submissions. Saved changes replace the stored resource
+              (approval status is unchanged unless you update it from Admin Review).
+            </p>
+            <p class="smallLine mb-3">
+              <a href="./admin-review.html"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Admin Review</a>
+            </p>
+
+            <div class="formatCard">
+              <span class="addressFormat">
+                <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                Administrator edit — sign in required. Use <strong>Save changes</strong> when finished.
+              </span>
+            </div>
+
+            <form id="resourceSubmitForm" class="submitForm" novalidate>
+              <p class="sectionTitle underline"
+                 data-aos="fade-up" data-aos-delay="110">
+                <strong>Resource Details</strong>
+              </p>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="140">
+                <div class="formField">
+                  <label class="formLabel" for="orgName">
+                    Organization / Program Name <span class="req">*</span>
+                  </label>
+                  <input class="formInput" id="orgName" name="orgName" type="text" required
+                         placeholder="Example: Chester County Food Bank">
+                </div>
+
+                <div class="formField">
+                  <label class="formLabel" for="category">
+                    Category <span class="req">*</span>
+                  </label>
+                  <select class="formInput" id="category" name="category" required>
+                    <option value="" selected disabled>Select one</option>
+                    <option>Crisis</option>
+                    <option>Mental Health</option>
+                    <option>Affordable Healthcare</option>
+                    <option>Housing</option>
+                    <option>Food</option>
+                    <option>Transportation</option>
+                    <option>Legal Help</option>
+                    <option>Clothing and Household</option>
+                    <option>Family Resources</option>
+                    <option>Home Repair</option>
+                    <option>Libraries and Resources</option>
+                    <option>Police Departments</option>
+                    <option>Hospitals</option>
+                    <option>Victim Support</option>
+                    <option>Special Needs Services</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="160">
+                <div class="formField">
+                  <label class="formLabel" for="website">Website</label>
+                  <input class="formInput" id="website" name="website" type="url"
+                         placeholder="https://example.org">
+                </div>
+
+                <div class="formField">
+                  <label class="formLabel" for="phone">Phone</label>
+                  <input class="formInput" id="phone" name="phone" type="tel"
+                         placeholder="123-456-7890">
+                </div>
+              </div>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="180">
+                <div class="formField formFieldWide">
+                  <label class="formLabel" for="address">Address (if applicable)</label>
+                  <input class="formInput" id="address" name="address" type="text"
+                         placeholder="Street, City, State ZIP">
+                </div>
+              </div>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="190">
+                <div class="formField formFieldWide">
+                  <label class="formLabel" for="resourceLocationMap">Location on map (optional)</label>
+                  <p class="smallLine mb-2">
+                    Move and click the map to drop a pin (drag the pin to adjust). Coordinates are saved with your submission.
+                  </p>
+                  <div id="resourceLocationMap" class="resource-location-map" aria-label="Map to choose resource coordinates"></div>
+                  <input type="hidden" id="resourceLatitude" name="resourceLatitude" value="">
+                  <input type="hidden" id="resourceLongitude" name="resourceLongitude" value="">
+                  <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="clearMapPinBtn">
+                    Clear map pin
+                  </button>
+                </div>
+              </div>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="200">
+                <div class="formField formFieldWide">
+                  <label class="formLabel" for="description">
+        Short Description (optional)
+                  </label>
+                  <textarea class="formInput formTextarea" id="description" name="description"
+          rows="5"
+                            placeholder="What does this resource provide? Who is it for?"></textarea>
+                </div>
+              </div>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="220">
+                <div class="formField formFieldWide">
+                  <label class="formLabel" for="hours">Hours (optional)</label>
+                  <input class="formInput" id="hours" name="hours" type="text"
+                         placeholder="Example: Mon–Fri 9 AM – 5 PM">
+                </div>
+              </div>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="230">
+                <div class="formField formFieldWide">
+                  <label class="formLabel">Contact Sections (matches resource card style)</label>
+                  <div id="contactSections" class="d-grid gap-3"></div>
+                  <button class="callButton mt-2" id="addSectionBtn" type="button">
+                    <i class="bi bi-plus-circle-fill" aria-hidden="true"></i>
+                    Add Section
+                  </button>
+                  <div class="smallLine mt-2">
+                    Add bold section headings and multiple contact rows (like Call/Text lines with notes).
+                  </div>
+                </div>
+              </div>
+
+              <div class="formGrid" data-aos="fade-up" data-aos-delay="240">
+                <div class="formField formFieldWide">
+                  <label class="formLabel" for="keywords">Search Keywords (optional)</label>
+                  <textarea class="formInput formTextarea" id="keywords" name="keywords" rows="3"
+                    placeholder="Example: food pantry groceries emergency assistance free meals"></textarea>
+                </div>
+              </div>
+
+              <div class="formatCard" style="margin-left:0;"
+                   data-aos="fade-up" data-aos-delay="280">
+                <label class="checkRow">
+                  <input class="checkBox" type="checkbox" id="confirm" name="confirm" required>
+                  <span>
+                    I confirm this information is accurate to the best of my knowledge.
+                    <span class="req">*</span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="formActions"
+                   data-aos="fade-up" data-aos-delay="300">
+                <button class="callButton" type="submit">
+                  <i class="bi bi-send-fill" aria-hidden="true"></i>
+                  Submit Resource
+                </button>
+
+                <button class="callButton d-none" type="button" id="clearFormBtn" aria-hidden="true" tabindex="-1">
+                  <i class="bi bi-eraser-fill" aria-hidden="true"></i>
+                  Clear
+                </button>
+              </div>
+
+              <div id="formMsg" class="formMsg" aria-live="polite"></div>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+    <footer class="footer">
+      <div class="container-xl footerShell">
+        <div class="footerTop row gy-5">
+          <div class="col-lg-5 col-md-12">
+            <div class="footerBrandCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="60">
+              <img src="./assets/images/bgLogo.png" alt="Atlas Hub logo" class="footerLogo">
+              <h3 class="footerBrandTitle">Atlas Hub</h3>
+              <p class="footerBrandText">
+                Connecting communities with trusted local resources — making help easier to find when it matters most.
+              </p>
+            </div>
+          </div>
+  
+          <div class="col-lg-3 col-md-6">
+            <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="100">
+              <h5 class="footerTitle">Useful Links</h5>
+              <ul class="footerLinks">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./resources.html">Resources</a></li>
+                <li><a href="./events.html">Events</a></li>
+                <li><a href="./submit.html">Submit a Resource</a></li>
+              </ul>
+            </div>
+          </div>
+  
+          <div class="col-lg-4 col-md-6">
+            <div class="footerColumnCard" data-aos="fade-up" data-aos-duration="450" data-aos-delay="140">
+              <h5 class="footerTitle">Contact</h5>
+              <div class="footerContactList">
+                <p class="footerContactItem">
+                  <i class="bi bi-geo-alt"></i>
+                  <span>Chester Springs, PA Hub</span>
+                </p>
+  
+                <a href="about.html" rel="noopener noreferrer" class="footerContactLink">
+                  <i class="bi bi-chat-dots"></i>
+                  <span>Feedback Form</span>
+                </a>
+  
+                <a href="mailto:atlashubprofessional@gmail.com" class="footerContactLink">
+                  <i class="bi bi-envelope"></i>
+                  <span>atlashubprofessional@gmail.com</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="footerBottomBar">
+          <p class="footerCopyright">© 2026 Atlas Hub. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered auth-modal-dialog">
+      <div class="modal-content auth-modal-shell border-0 shadow">
+        <button type="button" class="btn-close auth-modal-dismiss" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="auth-modal-logo-ring" aria-hidden="true">
+          <img src="./assets/images/symbol.png" alt="" width="52" height="52">
+        </div>
+        <div class="modal-body auth-modal-body">
+          <h2 class="auth-modal-title" id="authModalTitle">Atlas Hub Community Access</h2>
+          <p class="auth-modal-subtitle" id="authModalSubtitle">Please sign in or create an account.</p>
+
+          <form id="authModalForm" class="auth-modal-form" novalidate>
+            <div id="authMainFields">
+            <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
+              <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab" aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
+              <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab" aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
+            </div>
+
+            <div class="auth-modal-panel" data-auth-panel="signin" id="authPanelSignIn" role="tabpanel">
+              <h3 class="auth-modal-section-title">Account Sign In</h3>
+            </div>
+            <div class="auth-modal-panel d-none" data-auth-panel="signup" id="authPanelSignUp" role="tabpanel">
+              <h3 class="auth-modal-section-title">Create Account</h3>
+            </div>
+
+            <div id="authNameWrap" class="auth-modal-field d-none">
+              <label class="auth-modal-label" for="authModalName">Full name</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-person-fill auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalName" class="auth-modal-input form-control border-0 shadow-none" type="text" autocomplete="name" placeholder="Your full name">
+              </div>
+            </div>
+
+            <div class="auth-modal-field">
+              <label class="auth-modal-label" for="authModalEmail">Email Address</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalEmail" class="auth-modal-input form-control border-0 shadow-none" type="email" autocomplete="email" required placeholder="you@example.com">
+              </div>
+            </div>
+
+          
+
+            <div class="auth-modal-field">
+              <label class="auth-modal-label" for="authModalPassword">Password</label>
+              <div class="auth-modal-input-wrap">
+                <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                <input id="authModalPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="current-password" required placeholder="Enter password">
+              </div>
+            </div>
+
+            <div id="authForgotRow" class="auth-modal-forgot-row">
+              <span class="auth-modal-forgot-spacer"></span>
+              <a href="#" class="auth-modal-forgot" id="authForgotPasswordLink">Forgot password?</a>
+            </div>
+
+            <div id="authAdminRow" class="auth-modal-admin-row">
+              <div class="form-check form-switch auth-modal-switch">
+                <input class="form-check-input" type="checkbox" id="authAdminToggle" role="switch">
+                <label class="form-check-label auth-modal-switch-label" for="authAdminToggle">Login as admin Include Administrator Access</label>
+              </div>
+            </div>
+
+            <button type="submit" class="auth-modal-submit" id="authModalSubmitBtn">Sign In</button>
+            <button type="button" class="auth-modal-submit auth-modal-submit--signup d-none" id="authSignupBtn">Create Account</button>
+
+            <button type="button" class="auth-modal-logout d-none" id="authLogoutBtn">Log out</button>
+            </div>
+
+            <div id="authOtpPanel" class="auth-modal-secondary-flow d-none">
+              <h3 class="auth-modal-section-title" id="authOtpTitle">Verify your email</h3>
+              <p class="auth-modal-otp-lead" id="authOtpLead"></p>
+              <div class="auth-modal-field">
+                <label class="auth-modal-label" for="authModalOtp">Verification code</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-shield-lock auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalOtp" class="auth-modal-input form-control border-0 shadow-none" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
+                </div>
+              </div>
+              <button type="button" class="auth-modal-submit" id="authVerifyOtpBtn">Verify code</button>
+              <div class="auth-modal-inline-actions">
+                <button type="button" class="auth-modal-link-btn" id="authResendOtpBtn">Resend code</button>
+                <button type="button" class="auth-modal-link-btn" id="authOtpBackBtn">Back</button>
+              </div>
+            </div>
+
+            <div id="authForgotPanel" class="auth-modal-secondary-flow d-none">
+              <h3 class="auth-modal-section-title" id="authForgotTitle">Reset password</h3>
+              <div id="authForgotStep1">
+                <p class="auth-modal-otp-lead">Enter the email for your account. We will send a reset code if it exists.</p>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotEmail">Email</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotEmail" class="auth-modal-input form-control border-0 shadow-none" type="email" autocomplete="email" placeholder="you@example.com">
+                  </div>
+                </div>
+                <button type="button" class="auth-modal-submit" id="authForgotSendBtn">Send reset code</button>
+              </div>
+              <div id="authForgotStep2" class="d-none">
+                <p class="auth-modal-otp-lead">Enter the code from your email and choose a new password.</p>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotOtp">Verification code</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-shield-lock auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotOtp" class="auth-modal-input form-control border-0 shadow-none" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
+                  </div>
+                </div>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotNewPassword">New password</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotNewPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+                  </div>
+                </div>
+                <div class="auth-modal-field">
+                  <label class="auth-modal-label" for="authForgotConfirmPassword">Confirm new password</label>
+                  <div class="auth-modal-input-wrap">
+                    <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                    <input id="authForgotConfirmPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="new-password" placeholder="Repeat password">
+                  </div>
+                </div>
+                <button type="button" class="auth-modal-submit" id="authForgotResetBtn">Update password</button>
+              </div>
+              <div class="auth-modal-inline-actions auth-modal-inline-actions--footer">
+                <button type="button" class="auth-modal-link-btn" id="authForgotBackBtn">Back to sign in</button>
+              </div>
+            </div>
+
+            <div id="authModalMsg" class="auth-modal-msg" role="status"></div>
+
+            <p class="auth-modal-footer-hint" id="authModalFooterHint">Don't have an account? Use the tab above to create one.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+    integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+    crossorigin="anonymous"></script>
+  <script src="./assets/scripts/env.js"></script>
+  <script src="./assets/scripts/auth.js"></script>
+  <script src="./assets/scripts/submit.js"></script>
+  <script src="./assets/scripts/chat.js"></script>
+  <script src="./assets/scripts/loader.js"></script>
+  <script src="./assets/scripts/navbar-scroll.js"></script>
+  <script src="./assets/scripts/navbar-collapse-mobile.js"></script>
+</body>
+
+</html>

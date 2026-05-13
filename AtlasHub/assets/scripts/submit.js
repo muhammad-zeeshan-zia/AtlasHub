@@ -12,6 +12,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const mapEl = document.getElementById('resourceLocationMap');
   const clearMapPinBtn = document.getElementById('clearMapPinBtn');
 
+  const ADMIN_EDIT_RESOURCE_ID = (() => {
+    try {
+      const path = window.location.pathname || '';
+      if (!/admin-edit-resource\.html/i.test(path)) return '';
+      const id = new URLSearchParams(window.location.search || '').get('id');
+      return (id || '').trim();
+    } catch (_e) {
+      return '';
+    }
+  })();
+  const isAdminEdit = Boolean(ADMIN_EDIT_RESOURCE_ID);
+
+  const getSession = () => {
+    try {
+      return JSON.parse(localStorage.getItem('atlasAuth') || 'null');
+    } catch (_error) {
+      return null;
+    }
+  };
+
+  const escapeHtmlAttr = (value) =>
+    String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+  const displayOptionalField = (value) => {
+    if (value === null || value === undefined) return '';
+    const s = String(value).trim();
+    if (s === '' || s === 'N/A') return '';
+    return s;
+  };
+
   let resourceMap = null;
   let resourceMarker = null;
   let resourceAutocomplete = null;
@@ -189,13 +223,13 @@ document.addEventListener('DOMContentLoaded', () => {
           </select>
         </div>
         <div class="col-md-2">
-          <input class="formInput contact-action-label" type="text" placeholder="Call / Text" value="${contact.actionLabel || ''}">
+          <input class="formInput contact-action-label" type="text" placeholder="Call / Text" value="${escapeHtmlAttr(contact.actionLabel || '')}">
         </div>
         <div class="col-md-3">
-          <input class="formInput contact-value" type="text" placeholder="Number or URL" value="${contact.value || ''}">
+          <input class="formInput contact-value" type="text" placeholder="Number or URL" value="${escapeHtmlAttr(contact.value || '')}">
         </div>
         <div class="col-md-4">
-          <input class="formInput contact-note" type="text" placeholder="Note after dash" value="${contact.note || ''}">
+          <input class="formInput contact-note" type="text" placeholder="Note after dash" value="${escapeHtmlAttr(contact.note || '')}">
         </div>
         <div class="col-md-1 d-grid">
           <button type="button" class="btn btn-outline-danger remove-contact-btn">x</button>
@@ -212,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sectionBlock.innerHTML = `
       <div class="row g-2 mb-2">
         <div class="col-md-8">
-          <input class="formInput section-heading" type="text" placeholder="Section heading (bold line)" value="${section.heading || ''}">
+          <input class="formInput section-heading" type="text" placeholder="Section heading (bold line)" value="${escapeHtmlAttr(section.heading || '')}">
         </div>
         <div class="col-md-4 d-grid">
           <button type="button" class="btn btn-outline-danger remove-section-btn">Remove Section</button>
@@ -220,7 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="contact-rows"></div>
       <button type="button" class="btn btn-outline-primary btn-sm add-contact-btn mb-2">Add Contact Row</button>
-      <input class="formInput section-footer-note" type="text" placeholder="Footer note below rows (optional)" value="${section.footerNote || ''}">
+      <input class="formInput section-footer-note" type="text" placeholder="Footer note below rows (optional)" value="${escapeHtmlAttr(section.footerNote || '')}">
     `;
 
     const rowsContainer = sectionBlock.querySelector('.contact-rows');
@@ -230,6 +264,73 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     contactSections.appendChild(sectionBlock);
+  };
+
+  const populateFormFromResource = (r) => {
+    const org = document.getElementById('orgName');
+    if (org) org.value = r.orgName != null ? String(r.orgName) : '';
+
+    const cat = document.getElementById('category');
+    if (cat) {
+      const val = (r.category || '').trim();
+      let matched = false;
+      Array.from(cat.options).forEach((opt) => {
+        const isMatch = opt.value === val;
+        opt.selected = isMatch;
+        if (isMatch) matched = true;
+      });
+      if (val && !matched) {
+        cat.add(new Option(val, val, true, true));
+      }
+    }
+
+    const web = document.getElementById('website');
+    if (web) web.value = displayOptionalField(r.website);
+
+    const phoneEl = document.getElementById('phone');
+    if (phoneEl) phoneEl.value = displayOptionalField(r.phone);
+
+    const addr = document.getElementById('address');
+    if (addr) addr.value = displayOptionalField(r.address);
+
+    const latN = typeof r.latitude === 'number' ? r.latitude : Number(r.latitude);
+    const lngN = typeof r.longitude === 'number' ? r.longitude : Number(r.longitude);
+    if (latInput && lngInput) {
+      if (Number.isFinite(latN) && Number.isFinite(lngN)) {
+        latInput.value = latN.toFixed(6);
+        lngInput.value = lngN.toFixed(6);
+      } else {
+        latInput.value = '';
+        lngInput.value = '';
+      }
+    }
+
+    const desc = document.getElementById('description');
+    if (desc) desc.value = r.description != null ? String(r.description) : '';
+
+    const hours = document.getElementById('hours');
+    if (hours) hours.value = displayOptionalField(r.hours);
+
+    const kw = document.getElementById('keywords');
+    if (kw) kw.value = r.keywords != null ? String(r.keywords) : '';
+
+    if (contactSections) {
+      contactSections.innerHTML = '';
+      const sections = Array.isArray(r.sections) && r.sections.length ? r.sections : [];
+      if (sections.length) {
+        sections.forEach((sec) =>
+          addSection({
+            heading: sec.heading || '',
+            footerNote: sec.footerNote || '',
+            contacts: Array.isArray(sec.contacts) && sec.contacts.length ? sec.contacts : [{}]
+          })
+        );
+      } else {
+        addSection();
+      }
+    }
+
+    if (confirm) confirm.checked = true;
   };
 
   function showMessage(type, html) {
@@ -316,7 +417,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       showMessage(
         'error',
-        `<i class="bi bi-exclamation-triangle-fill"></i> Please confirm the information is accurate before submitting.`
+        isAdminEdit
+          ? `<i class="bi bi-exclamation-triangle-fill"></i> Please confirm the information is accurate before saving.`
+          : `<i class="bi bi-exclamation-triangle-fill"></i> Please confirm the information is accurate before submitting.`
       );
       return;
     }
@@ -363,47 +466,133 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const response = await fetch(`${API_BASE}/resources`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(params)
-      });
+      const session = isAdminEdit ? getSession() : null;
+      if (isAdminEdit && (!session?.token || session.user?.role !== 'admin')) {
+        showMessage(
+          'error',
+          `<i class="bi bi-shield-lock"></i> Admin session expired. Sign in again to save changes.`
+        );
+        return;
+      }
+
+      const response = isAdminEdit
+        ? await fetch(`${API_BASE}/admin/resources/${ADMIN_EDIT_RESOURCE_ID}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${session.token}`
+            },
+            body: JSON.stringify(params)
+          })
+        : await fetch(`${API_BASE}/resources`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params)
+          });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || 'Submission failed.');
+        throw new Error(data.message || (isAdminEdit ? 'Update failed.' : 'Submission failed.'));
       }
 
-      form.reset();
-      clearResourceMapPin();
-      msg.className = 'formMsg formMsgSuccess';
-      msg.innerHTML = `
+      if (isAdminEdit) {
+        if (data.resource) {
+          populateFormFromResource(data.resource);
+        }
+        msg.className = 'formMsg formMsgSuccess';
+        msg.innerHTML = `
+          <div class="addressFormat" style="display:inline-block;">
+            <i class="bi bi-check-circle-fill"></i>
+            Resource updated successfully.
+          </div>
+        `;
+      } else {
+        form.reset();
+        clearResourceMapPin();
+        msg.className = 'formMsg formMsgSuccess';
+        msg.innerHTML = `
           <div class="addressFormat" style="display:inline-block;">
             <i class="bi bi-check-circle-fill"></i>
             Resource submitted successfully! Waiting for admin approval.
           </div>
         `;
+      }
 
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `
-          <i class="bi bi-check-circle-fill"></i>
-          Submitted!
-        `;
+      submitBtn.innerHTML = isAdminEdit
+        ? `<i class="bi bi-check-circle-fill"></i> Saved!`
+        : `<i class="bi bi-check-circle-fill"></i> Submitted!`;
 
       setTimeout(() => {
+        if (!submitBtn) return;
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `
-            <i class="bi bi-send-fill"></i>
-            Submit Resource
-          `;
+        submitBtn.innerHTML = isAdminEdit
+          ? `<i class="bi bi-check2-circle"></i> Save changes`
+          : `<i class="bi bi-send-fill"></i> Submit Resource`;
       }, 2000);
     } catch (error) {
       showMessage('error', `<i class="bi bi-exclamation-triangle-fill"></i> ${error.message}`);
     }
   });
 
-  addSection();
-  initAtlasResourceLocationMap();
+  (async () => {
+    if (isAdminEdit) {
+      if (submitBtn) {
+        submitBtn.innerHTML = `<i class="bi bi-check2-circle"></i> Save changes`;
+      }
+
+      const session = getSession();
+      if (!session?.token || session.user?.role !== 'admin') {
+        showMessage(
+          'error',
+          `<i class="bi bi-shield-lock"></i> Admin login required. Use Login in the navbar, then open this page again from Admin Review.`
+        );
+        form.querySelectorAll('input, select, textarea, button').forEach((el) => {
+          el.disabled = true;
+        });
+        return;
+      }
+
+      try {
+        msg.textContent = 'Loading resource…';
+        msg.className = 'formMsg';
+
+        const res = await fetch(`${API_BASE}/admin/resources/${ADMIN_EDIT_RESOURCE_ID}`, {
+          headers: { Authorization: `Bearer ${session.token}` }
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data?.message || 'Failed to load resource.');
+        }
+
+        populateFormFromResource(data);
+        msg.textContent = '';
+        msg.className = 'formMsg';
+      } catch (err) {
+        showMessage('error', `<i class="bi bi-exclamation-triangle-fill"></i> ${err.message || 'Failed to load resource.'}`);
+        form.querySelectorAll('input, select, textarea, button').forEach((el) => {
+          el.disabled = true;
+        });
+        return;
+      }
+    } else {
+      addSection();
+    }
+
+    await initAtlasResourceLocationMap();
+
+    if (resourceMap && googleRef) {
+      const latS = latInput?.value?.trim() || '';
+      const lngS = lngInput?.value?.trim() || '';
+      if (latS && lngS) {
+        const latN = Number(latS);
+        const lngN = Number(lngS);
+        if (Number.isFinite(latN) && Number.isFinite(lngN)) {
+          setResourcePin(latN, lngN, { centerMap: true });
+        }
+      }
+    }
+  })();
 });

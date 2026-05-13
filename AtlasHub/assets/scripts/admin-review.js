@@ -219,6 +219,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <div class="admin-resource-meta">${metaItems}</div>
 
+          <div class="admin-resource-edit-row">
+            <a class="admin-edit-resource-link"
+               href="admin-edit-resource.html?id=${escapeHTML(r._id)}">
+              <i class="bi bi-pencil-square" aria-hidden="true"></i>
+              Edit listing
+            </a>
+          </div>
+
           <div class="admin-status-actions" role="group" aria-label="Change resource status">
             <span class="admin-status-actions-label">Set status</span>
             ${buildBtn("pending",  "Pending",  "bi-hourglass-split",   "pending")}

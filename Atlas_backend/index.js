@@ -20,6 +20,8 @@ const {
   getPendingResources,
   getApprovedResources,
   getAllResources,
+  getResourceByIdAdmin,
+  updateResourceByAdmin,
   setResourceStatus
 } = require("./controllers/resource.controller");
 
@@ -80,6 +82,8 @@ app.get("/api/resources/approved", getApprovedResources);
 app.post("/api/resources", submitResource);
 app.get("/api/admin/resources", auth, adminOnly, getAllResources);
 app.get("/api/admin/resources/pending", auth, adminOnly, getPendingResources);
+app.get("/api/admin/resources/:id", auth, adminOnly, getResourceByIdAdmin);
+app.patch("/api/admin/resources/:id", auth, adminOnly, updateResourceByAdmin);
 app.patch("/api/admin/resources/:id/status", auth, adminOnly, setResourceStatus);
 app.patch("/api/admin/resources/:id/approve", auth, adminOnly, approveResource);
 app.patch("/api/admin/resources/:id/reject", auth, adminOnly, rejectResource);
