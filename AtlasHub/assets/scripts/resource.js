@@ -295,7 +295,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 <a class="addressFormat resource-address-maps-link"
                   href="${escapeHtml(mapsHref)}"
                   target="_blank"
-                  rel="noopener noreferrer">
+                  rel="noopener noreferrer"
+                  title="Open directions in Google Maps (new tab)">
                   <i class="bi bi-geo-alt" aria-hidden="true"></i> ${escapeHtml(item.address)}
                 </a>
               </div>`

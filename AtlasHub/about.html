@@ -126,23 +126,23 @@
                 <li class="nav-item mx-1 first-nav-button home button-shape-nav d-none" data-admin-review-nav>
                   <a class="nav-link" href="./admin-review.html">Admin Review</a>
                 </li>
-                <li class="nav-item dropdown mx-1 first-nav-button home button-shape-nav nav-emergency-dropdown align-self-center">
-                  <button type="button"
-                          class="nav-link dropdown-toggle atlas-emergency-toggle"
-                          id="emergencyNavDropdown"
-                          data-bs-toggle="dropdown"
-                          aria-expanded="false"
-                          aria-haspopup="true">
+                <li
+                  class="nav-item dropdown mx-1 first-nav-button home button-shape-nav nav-emergency-dropdown align-self-center">
+                  <button type="button" class="nav-link dropdown-toggle atlas-emergency-toggle"
+                    id="emergencyNavDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
                     Emergency
                   </button>
-                  <ul class="dropdown-menu dropdown-menu-end atlas-emergency-menu shadow-sm" aria-labelledby="emergencyNavDropdown">
+                  <ul class="dropdown-menu dropdown-menu-end atlas-emergency-menu shadow-sm"
+                    aria-labelledby="emergencyNavDropdown">
                     <li>
                       <a class="dropdown-item atlas-emergency-item" href="tel:911">
                         <strong>911</strong>
                         <span class="d-block small text-muted">Medical, fire, or life-threatening emergency</span>
                       </a>
                     </li>
-                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
                     <li>
                       <a class="dropdown-item atlas-emergency-item" href="tel:988">
                         <strong>988</strong>
@@ -245,17 +245,19 @@
               <div class="donateLayout">
                 <div class="donateIntro sectionIntro">
                   <p class="eyebrow">Support the hub</p>
-                  <h2 class="sectionTitle" id="donate-title">Donate to Atlas Hub</h2>
+                  <h2 class="sectionTitle" id="donate-title">Donate to Chester County Food Bank</h2>
                   <p class="sectionText">
-                    Help keep trusted community resources discoverable and up to date.
-                    Choose an amount and complete checkout securely—you’ll be redirected to Stripe to pay by card.
+                    Food is a basic need, and access to fresh, nutritious meals helps many children and families thrive.
+                    Your donation supports Chester County Food Bank’s efforts to fight hunger and improve food access
+                    for people in need.
                   </p>
                   <ul class="donateBullets" aria-label="What donations support">
-                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Listing maintenance and review time
+                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Helps provide nutritious food to
+                      local families
+                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Supports hunger relief programs
+                      across Chester County
                     </li>
-                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Hosting and platform improvements
-                    </li>
-                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Nonprofit, community-focused tooling
+                    <li><i class="bi bi-check-circle-fill" aria-hidden="true"></i>Strengthens community food access
                     </li>
                   </ul>
                 </div>
@@ -439,67 +441,67 @@
 
           <form id="authModalForm" class="auth-modal-form" novalidate>
             <div id="authMainFields">
-            <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
-              <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab"
-                aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
-              <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab"
-                aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
-            </div>
-
-            <div class="auth-modal-panel" data-auth-panel="signin" id="authPanelSignIn" role="tabpanel">
-              <h3 class="auth-modal-section-title">Account Sign In</h3>
-            </div>
-            <div class="auth-modal-panel d-none" data-auth-panel="signup" id="authPanelSignUp" role="tabpanel">
-              <h3 class="auth-modal-section-title">Create Account</h3>
-            </div>
-
-            <div id="authNameWrap" class="auth-modal-field d-none">
-              <label class="auth-modal-label" for="authModalName">Full name</label>
-              <div class="auth-modal-input-wrap">
-                <i class="bi bi-person-fill auth-modal-input-icon" aria-hidden="true"></i>
-                <input id="authModalName" class="auth-modal-input form-control border-0 shadow-none" type="text"
-                  autocomplete="name" placeholder="Your full name">
+              <div class="auth-modal-tabs" id="authModalTabs" role="tablist" aria-label="Sign in or register">
+                <button type="button" class="auth-modal-tab active" id="authTabSignIn" data-auth-tab="signin" role="tab"
+                  aria-selected="true" aria-controls="authPanelSignIn">Sign In</button>
+                <button type="button" class="auth-modal-tab" id="authTabSignUp" data-auth-tab="signup" role="tab"
+                  aria-selected="false" aria-controls="authPanelSignUp">Create Account</button>
               </div>
-            </div>
 
-            <div class="auth-modal-field">
-              <label class="auth-modal-label" for="authModalEmail">Email Address</label>
-              <div class="auth-modal-input-wrap">
-                <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
-                <input id="authModalEmail" class="auth-modal-input form-control border-0 shadow-none" type="email"
-                  autocomplete="email" required placeholder="you@example.com">
+              <div class="auth-modal-panel" data-auth-panel="signin" id="authPanelSignIn" role="tabpanel">
+                <h3 class="auth-modal-section-title">Account Sign In</h3>
               </div>
-            </div>
-
-           
-
-            <div class="auth-modal-field">
-              <label class="auth-modal-label" for="authModalPassword">Password</label>
-              <div class="auth-modal-input-wrap">
-                <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
-                <input id="authModalPassword" class="auth-modal-input form-control border-0 shadow-none" type="password"
-                  autocomplete="current-password" required placeholder="Enter password">
+              <div class="auth-modal-panel d-none" data-auth-panel="signup" id="authPanelSignUp" role="tabpanel">
+                <h3 class="auth-modal-section-title">Create Account</h3>
               </div>
-            </div>
 
-            <div id="authForgotRow" class="auth-modal-forgot-row">
-              <span class="auth-modal-forgot-spacer"></span>
-              <a href="#" class="auth-modal-forgot" id="authForgotPasswordLink">Forgot password?</a>
-            </div>
-
-            <div id="authAdminRow" class="auth-modal-admin-row">
-              <div class="form-check form-switch auth-modal-switch">
-                <input class="form-check-input" type="checkbox" id="authAdminToggle" role="switch">
-                <label class="form-check-label auth-modal-switch-label" for="authAdminToggle">Login as admin Include
-                  Administrator Access</label>
+              <div id="authNameWrap" class="auth-modal-field d-none">
+                <label class="auth-modal-label" for="authModalName">Full name</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-person-fill auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalName" class="auth-modal-input form-control border-0 shadow-none" type="text"
+                    autocomplete="name" placeholder="Your full name">
+                </div>
               </div>
-            </div>
 
-            <button type="submit" class="auth-modal-submit" id="authModalSubmitBtn">Sign In</button>
-            <button type="button" class="auth-modal-submit auth-modal-submit--signup d-none" id="authSignupBtn">Create
-              Account</button>
+              <div class="auth-modal-field">
+                <label class="auth-modal-label" for="authModalEmail">Email Address</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalEmail" class="auth-modal-input form-control border-0 shadow-none" type="email"
+                    autocomplete="email" required placeholder="you@example.com">
+                </div>
+              </div>
 
-            <button type="button" class="auth-modal-logout d-none" id="authLogoutBtn">Log out</button>
+
+
+              <div class="auth-modal-field">
+                <label class="auth-modal-label" for="authModalPassword">Password</label>
+                <div class="auth-modal-input-wrap">
+                  <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
+                  <input id="authModalPassword" class="auth-modal-input form-control border-0 shadow-none"
+                    type="password" autocomplete="current-password" required placeholder="Enter password">
+                </div>
+              </div>
+
+              <div id="authForgotRow" class="auth-modal-forgot-row">
+                <span class="auth-modal-forgot-spacer"></span>
+                <a href="#" class="auth-modal-forgot" id="authForgotPasswordLink">Forgot password?</a>
+              </div>
+
+              <div id="authAdminRow" class="auth-modal-admin-row">
+                <div class="form-check form-switch auth-modal-switch">
+                  <input class="form-check-input" type="checkbox" id="authAdminToggle" role="switch">
+                  <label class="form-check-label auth-modal-switch-label" for="authAdminToggle">Login as admin Include
+                    Administrator Access</label>
+                </div>
+              </div>
+
+              <button type="submit" class="auth-modal-submit" id="authModalSubmitBtn">Sign In</button>
+              <button type="button" class="auth-modal-submit auth-modal-submit--signup d-none" id="authSignupBtn">Create
+                Account</button>
+
+              <button type="button" class="auth-modal-logout d-none" id="authLogoutBtn">Log out</button>
             </div>
 
             <div id="authOtpPanel" class="auth-modal-secondary-flow d-none">
@@ -509,7 +511,8 @@
                 <label class="auth-modal-label" for="authModalOtp">Verification code</label>
                 <div class="auth-modal-input-wrap">
                   <i class="bi bi-shield-lock auth-modal-input-icon" aria-hidden="true"></i>
-                  <input id="authModalOtp" class="auth-modal-input form-control border-0 shadow-none" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
+                  <input id="authModalOtp" class="auth-modal-input form-control border-0 shadow-none" type="text"
+                    inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
                 </div>
               </div>
               <button type="button" class="auth-modal-submit" id="authVerifyOtpBtn">Verify code</button>
@@ -522,12 +525,14 @@
             <div id="authForgotPanel" class="auth-modal-secondary-flow d-none">
               <h3 class="auth-modal-section-title" id="authForgotTitle">Reset password</h3>
               <div id="authForgotStep1">
-                <p class="auth-modal-otp-lead">Enter the email for your account. We will send a reset code if it exists.</p>
+                <p class="auth-modal-otp-lead">Enter the email for your account. We will send a reset code if it exists.
+                </p>
                 <div class="auth-modal-field">
                   <label class="auth-modal-label" for="authForgotEmail">Email</label>
                   <div class="auth-modal-input-wrap">
                     <i class="bi bi-envelope auth-modal-input-icon" aria-hidden="true"></i>
-                    <input id="authForgotEmail" class="auth-modal-input form-control border-0 shadow-none" type="email" autocomplete="email" placeholder="you@example.com">
+                    <input id="authForgotEmail" class="auth-modal-input form-control border-0 shadow-none" type="email"
+                      autocomplete="email" placeholder="you@example.com">
                   </div>
                 </div>
                 <button type="button" class="auth-modal-submit" id="authForgotSendBtn">Send reset code</button>
@@ -538,21 +543,24 @@
                   <label class="auth-modal-label" for="authForgotOtp">Verification code</label>
                   <div class="auth-modal-input-wrap">
                     <i class="bi bi-shield-lock auth-modal-input-icon" aria-hidden="true"></i>
-                    <input id="authForgotOtp" class="auth-modal-input form-control border-0 shadow-none" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
+                    <input id="authForgotOtp" class="auth-modal-input form-control border-0 shadow-none" type="text"
+                      inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="6-digit code">
                   </div>
                 </div>
                 <div class="auth-modal-field">
                   <label class="auth-modal-label" for="authForgotNewPassword">New password</label>
                   <div class="auth-modal-input-wrap">
                     <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
-                    <input id="authForgotNewPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+                    <input id="authForgotNewPassword" class="auth-modal-input form-control border-0 shadow-none"
+                      type="password" autocomplete="new-password" placeholder="At least 8 characters">
                   </div>
                 </div>
                 <div class="auth-modal-field">
                   <label class="auth-modal-label" for="authForgotConfirmPassword">Confirm new password</label>
                   <div class="auth-modal-input-wrap">
                     <i class="bi bi-lock-fill auth-modal-input-icon" aria-hidden="true"></i>
-                    <input id="authForgotConfirmPassword" class="auth-modal-input form-control border-0 shadow-none" type="password" autocomplete="new-password" placeholder="Repeat password">
+                    <input id="authForgotConfirmPassword" class="auth-modal-input form-control border-0 shadow-none"
+                      type="password" autocomplete="new-password" placeholder="Repeat password">
                   </div>
                 </div>
                 <button type="button" class="auth-modal-submit" id="authForgotResetBtn">Update password</button>

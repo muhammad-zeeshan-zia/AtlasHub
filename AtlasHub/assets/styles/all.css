@@ -1424,7 +1424,7 @@ body.modal-open .modal-backdrop {
   font-size: 1.05rem;
   font-weight: 800;
   color: #1f2f2b;
-  margin: 0 0 1rem;
+  margin: 0.85rem 0 1rem;
 }
 
 .auth-modal-field {
@@ -1544,13 +1544,18 @@ body.modal-open .modal-backdrop {
 }
 
 .auth-modal-switch {
-  padding-left: 2.65rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 0;
 }
 
 .auth-modal-switch .form-check-input {
   width: 2.65rem;
   height: 1.35rem;
-  margin-left: -2.65rem;
+  margin-left: 0;
+  flex-shrink: 0;
   cursor: pointer;
   border-color: rgba(59, 139, 123, 0.45);
   background-color: rgba(241, 251, 247, 0.95);
@@ -1571,6 +1576,8 @@ body.modal-open .modal-backdrop {
   color: #2f4c45;
   line-height: 1.35;
   cursor: pointer;
+  flex: 1;
+  min-width: 0;
 }
 
 .auth-modal-submit {

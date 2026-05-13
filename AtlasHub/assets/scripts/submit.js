@@ -212,6 +212,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!form) return;
 
+  /** Recalculate AOS positions after layout height changes (e.g. removing a contact section). */
+  const refreshAOS = () => {
+    if (typeof AOS === 'undefined') return;
+    requestAnimationFrame(() => {
+      if (typeof AOS.refreshHard === 'function') {
+        AOS.refreshHard();
+      } else if (typeof AOS.refresh === 'function') {
+        AOS.refresh();
+      }
+    });
+  };
+
   const createContactRowHtml = (contact = {}) => `
     <div class="contact-row border rounded p-2 mb-2">
       <div class="row g-2">
@@ -325,9 +337,8 @@ document.addEventListener('DOMContentLoaded', () => {
             contacts: Array.isArray(sec.contacts) && sec.contacts.length ? sec.contacts : [{}]
           })
         );
-      } else {
-        addSection();
       }
+      refreshAOS();
     }
 
     if (confirm) confirm.checked = true;
@@ -367,15 +378,19 @@ document.addEventListener('DOMContentLoaded', () => {
     form.querySelectorAll('input, select, textarea').forEach(el => setInvalid(el, false));
     if (contactSections) {
       contactSections.innerHTML = '';
-      addSection();
     }
+    refreshAOS();
   });
 
-  addSectionBtn?.addEventListener('click', () => addSection());
+  addSectionBtn?.addEventListener('click', () => {
+    addSection();
+    refreshAOS();
+  });
 
   contactSections?.addEventListener('click', (event) => {
     if (event.target.closest('.remove-section-btn')) {
       event.target.closest('.section-block')?.remove();
+      refreshAOS();
       return;
     }
 
@@ -383,11 +398,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const sectionBlock = event.target.closest('.section-block');
       const rowsContainer = sectionBlock?.querySelector('.contact-rows');
       rowsContainer?.insertAdjacentHTML('beforeend', createContactRowHtml({}));
+      refreshAOS();
       return;
     }
 
     if (event.target.closest('.remove-contact-btn')) {
       event.target.closest('.contact-row')?.remove();
+      refreshAOS();
     }
   });
 
@@ -511,6 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         form.reset();
         clearResourceMapPin();
+        if (contactSections) contactSections.innerHTML = '';
         msg.className = 'formMsg formMsgSuccess';
         msg.innerHTML = `
           <div class="addressFormat" style="display:inline-block;">
@@ -518,6 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
             Resource submitted successfully! Waiting for admin approval.
           </div>
         `;
+        refreshAOS();
       }
 
       submitBtn.disabled = true;
@@ -577,8 +596,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         return;
       }
-    } else {
-      addSection();
     }
 
     await initAtlasResourceLocationMap();
