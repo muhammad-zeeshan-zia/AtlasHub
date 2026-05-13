@@ -934,3 +934,19 @@ a.addressFormat.resource-address-maps-link:focus-visible {
   outline: 2px solid rgba(234, 126, 87, 0.85);
   outline-offset: 3px;
 }
+
+/* Dynamic resource cards: multi-line hours from API */
+.resource-hours-wrap {
+  line-height: 1.5;
+}
+
+.resource-hours-label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.resource-hours-multiline {
+  display: block;
+  white-space: pre-line;
+  word-break: break-word;
+}

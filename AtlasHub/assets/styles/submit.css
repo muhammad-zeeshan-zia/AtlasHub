@@ -232,6 +232,11 @@ body.submit-page {
   min-height: 110px;
 }
 
+.hours-textarea {
+  min-height: 5.5rem;
+  line-height: 1.45;
+}
+
 .checkRow {
   display: inline-flex;
   gap: 8px;

@@ -6,13 +6,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const msgEl = document.getElementById("adminReviewMsg");
   const tabsContainer = document.querySelector(".admin-review-tabs");
   const tabs = Array.from(document.querySelectorAll(".admin-tab"));
+  const categoryToolbar = document.getElementById("adminCategoryToolbar");
+  const categoryFilter = document.getElementById("adminCategoryFilter");
 
   if (!listEl || !tabsContainer) return;
 
   const state = {
     currentTab: "pending",
     resources: [],
-    loading: false
+    loading: false,
+    /** Empty string = all categories (within current status tab). */
+    filterCategory: ""
   };
 
   const STATUS_META = {
@@ -20,6 +24,25 @@ document.addEventListener("DOMContentLoaded", () => {
     approved: { label: "Approved", icon: "bi-check-circle-fill", badge: "is-approved" },
     rejected: { label: "Rejected", icon: "bi-x-circle-fill",     badge: "is-rejected" }
   };
+
+  /** Same order as submit / resources tabs — unknown categories sort after these. */
+  const CATEGORY_ORDER = [
+    "Crisis",
+    "Mental Health",
+    "Affordable Healthcare",
+    "Housing",
+    "Food",
+    "Transportation",
+    "Legal Help",
+    "Clothing and Household",
+    "Family Resources",
+    "Home Repair",
+    "Libraries and Resources",
+    "Police Departments",
+    "Hospitals",
+    "Victim Support",
+    "Special Needs Services"
+  ];
 
   const escapeHTML = (value) => {
     if (value === null || value === undefined) return "";
@@ -84,13 +107,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const showSkeletons = () => {
     emptyEl.classList.add("d-none");
+    listEl.classList.remove("admin-resource-list--by-category");
     listEl.innerHTML = Array.from({ length: 4 })
       .map(() => `<div class="admin-skeleton-card" aria-hidden="true"></div>`)
       .join("");
   };
 
   const showGate = () => {
+    categoryToolbar?.classList.add("d-none");
     emptyEl.classList.add("d-none");
+    listEl.classList.remove("admin-resource-list--by-category");
     listEl.innerHTML = `
       <div class="admin-review-gate" style="grid-column: 1 / -1;">
         <i class="bi bi-shield-lock" aria-hidden="true"></i>
@@ -112,47 +138,91 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("countRejected").textContent = counts.rejected;
   };
 
-  const renderResources = () => {
-    const visible = state.resources.filter((r) => r.status === state.currentTab);
+  const normalizeResourceCategory = (r) => {
+    const raw = (r.category ?? "").toString().trim();
+    return raw || "Uncategorized";
+  };
 
-    if (visible.length === 0) {
-      listEl.innerHTML = "";
-      emptyEl.classList.remove("d-none");
-      const meta = STATUS_META[state.currentTab];
-      emptyEl.querySelector(".admin-empty-title").textContent =
-        `No ${meta.label.toLowerCase()} resources`;
-      emptyEl.querySelector(".admin-empty-text").textContent =
-        state.currentTab === "pending"
-          ? "All caught up — there are no pending submissions to review."
-          : `There are no ${meta.label.toLowerCase()} resources right now.`;
-      return;
+  const sortCategoryKeys = (keys) => {
+    const uniq = [...new Set(keys)];
+    uniq.sort((a, b) => {
+      const ia = CATEGORY_ORDER.indexOf(a);
+      const ib = CATEGORY_ORDER.indexOf(b);
+      if (ia !== -1 && ib !== -1) return ia - ib;
+      if (ia !== -1) return -1;
+      if (ib !== -1) return 1;
+      return a.localeCompare(b, undefined, { sensitivity: "base" });
+    });
+    return uniq;
+  };
+
+  const groupVisibleByCategory = (items) => {
+    const map = new Map();
+    items.forEach((r) => {
+      const key = normalizeResourceCategory(r);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(r);
+    });
+
+    return sortCategoryKeys(Array.from(map.keys())).map((category) => ({
+      category,
+      resources: map.get(category)
+    }));
+  };
+
+  const syncCategoryFilterSelect = (inTab) => {
+    if (!categoryFilter) return;
+
+    const counts = new Map();
+    inTab.forEach((r) => {
+      const k = normalizeResourceCategory(r);
+      counts.set(k, (counts.get(k) || 0) + 1);
+    });
+    const keys = sortCategoryKeys(Array.from(counts.keys()));
+
+    if (state.filterCategory && !keys.includes(state.filterCategory)) {
+      state.filterCategory = "";
     }
 
-    emptyEl.classList.add("d-none");
+    categoryFilter.replaceChildren();
+    const optAll = document.createElement("option");
+    optAll.value = "";
+    optAll.textContent = "All categories";
+    categoryFilter.appendChild(optAll);
 
-    listEl.innerHTML = visible.map((r) => {
-      const status = STATUS_META[r.status] || STATUS_META.pending;
+    keys.forEach((k) => {
+      const o = document.createElement("option");
+      o.value = k;
+      o.textContent = `${k} (${counts.get(k) || 0})`;
+      categoryFilter.appendChild(o);
+    });
 
-      const metaItems = [
-        r.phone
-          ? `<div class="admin-meta-item">
-               <i class="bi bi-telephone" aria-hidden="true"></i>
-               <span>${escapeHTML(r.phone)}</span>
-             </div>`
-          : "",
-        (() => {
-          if (!r.address) return "";
-          const lat = parseFiniteCoord(r.latitude);
-          const lng = parseFiniteCoord(r.longitude);
-          const href = googleMapsDirectionsFromHereUrl(lat, lng, r.address);
-          if (!href) {
-            return `
+    categoryFilter.value = state.filterCategory;
+  };
+
+  const renderResourceCard = (r) => {
+    const status = STATUS_META[r.status] || STATUS_META.pending;
+
+    const metaItems = [
+      r.phone
+        ? `<div class="admin-meta-item">
+             <i class="bi bi-telephone" aria-hidden="true"></i>
+             <span>${escapeHTML(r.phone)}</span>
+           </div>`
+        : "",
+      (() => {
+        if (!r.address) return "";
+        const lat = parseFiniteCoord(r.latitude);
+        const lng = parseFiniteCoord(r.longitude);
+        const href = googleMapsDirectionsFromHereUrl(lat, lng, r.address);
+        if (!href) {
+          return `
             <div class="admin-meta-item admin-meta-item--address">
               <i class="bi bi-geo-alt" aria-hidden="true"></i>
               <span class="admin-address-text">${escapeHTML(r.address)}</span>
             </div>`;
-          }
-          return `
+        }
+        return `
             <div class="admin-meta-item admin-meta-item--address">
               <i class="bi bi-geo-alt" aria-hidden="true"></i>
               <a class="admin-address-text admin-address-maps-link"
@@ -162,47 +232,47 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${escapeHTML(r.address)}
               </a>
             </div>`;
-        })(),
-        r.website
-          ? `<div class="admin-meta-item">
-               <i class="bi bi-globe" aria-hidden="true"></i>
-               <span><a href="${escapeHTML(r.website)}" target="_blank" rel="noopener noreferrer">${escapeHTML(r.website)}</a></span>
-             </div>`
-          : "",
-        r.hours
-          ? `<div class="admin-meta-item">
-               <i class="bi bi-clock" aria-hidden="true"></i>
-               <span>${escapeHTML(r.hours)}</span>
-             </div>`
-          : "",
-        r.createdAt
-          ? `<div class="admin-meta-item">
-               <i class="bi bi-calendar-event" aria-hidden="true"></i>
-               <span>Submitted ${escapeHTML(formatDate(r.createdAt))}</span>
-             </div>`
-          : "",
-        r.status !== "pending" && r.approvedAt
-          ? `<div class="admin-meta-item">
-               <i class="bi bi-clock-history" aria-hidden="true"></i>
-               <span>${r.status === "approved" ? "Approved" : "Updated"} ${escapeHTML(formatDate(r.approvedAt))}${
-                 r.approvedBy?.name ? ` by ${escapeHTML(r.approvedBy.name)}` : ""
-               }</span>
-             </div>`
-          : ""
-      ].filter(Boolean).join("");
+      })(),
+      r.website
+        ? `<div class="admin-meta-item">
+             <i class="bi bi-globe" aria-hidden="true"></i>
+             <span><a href="${escapeHTML(r.website)}" target="_blank" rel="noopener noreferrer">${escapeHTML(r.website)}</a></span>
+           </div>`
+        : "",
+      r.hours && r.hours !== "N/A"
+        ? `<div class="admin-meta-item admin-meta-item--multiline">
+             <i class="bi bi-clock" aria-hidden="true"></i>
+             <span class="admin-hours-multiline">${escapeHTML(String(r.hours).replace(/\r\n/g, "\n"))}</span>
+           </div>`
+        : "",
+      r.createdAt
+        ? `<div class="admin-meta-item">
+             <i class="bi bi-calendar-event" aria-hidden="true"></i>
+             <span>Submitted ${escapeHTML(formatDate(r.createdAt))}</span>
+           </div>`
+        : "",
+      r.status !== "pending" && r.approvedAt
+        ? `<div class="admin-meta-item">
+             <i class="bi bi-clock-history" aria-hidden="true"></i>
+             <span>${r.status === "approved" ? "Approved" : "Updated"} ${escapeHTML(formatDate(r.approvedAt))}${
+               r.approvedBy?.name ? ` by ${escapeHTML(r.approvedBy.name)}` : ""
+             }</span>
+           </div>`
+        : ""
+    ].filter(Boolean).join("");
 
-      const buildBtn = (status, label, icon, mod) => `
+    const buildBtn = (st, label, icon, mod) => `
         <button type="button"
-                class="admin-status-btn admin-status-btn--${mod} ${r.status === status ? "is-current" : ""}"
+                class="admin-status-btn admin-status-btn--${mod} ${r.status === st ? "is-current" : ""}"
                 data-id="${escapeHTML(r._id)}"
-                data-status="${status}"
-                ${r.status === status ? "disabled aria-current=\"true\"" : ""}>
+                data-status="${st}"
+                ${r.status === st ? "disabled aria-current=\"true\"" : ""}>
           <i class="bi ${icon}" aria-hidden="true"></i>
           ${label}
         </button>
       `;
 
-      return `
+    return `
         <article class="admin-resource-card" data-id="${escapeHTML(r._id)}">
           <header class="admin-resource-card-head">
             <div class="admin-resource-card-head-text">
@@ -235,7 +305,60 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </article>
       `;
-    }).join("");
+  };
+
+  const renderResources = () => {
+    const inTab = state.resources.filter((r) => r.status === state.currentTab);
+    syncCategoryFilterSelect(inTab);
+
+    let visible = inTab;
+    if (state.filterCategory) {
+      visible = inTab.filter((r) => normalizeResourceCategory(r) === state.filterCategory);
+    }
+
+    if (inTab.length === 0) {
+      listEl.innerHTML = "";
+      listEl.classList.remove("admin-resource-list--by-category");
+      emptyEl.classList.remove("d-none");
+      const meta = STATUS_META[state.currentTab];
+      emptyEl.querySelector(".admin-empty-title").textContent =
+        `No ${meta.label.toLowerCase()} resources`;
+      emptyEl.querySelector(".admin-empty-text").textContent =
+        state.currentTab === "pending"
+          ? "All caught up — there are no pending submissions to review."
+          : `There are no ${meta.label.toLowerCase()} resources right now.`;
+      return;
+    }
+
+    if (visible.length === 0) {
+      listEl.innerHTML = "";
+      listEl.classList.remove("admin-resource-list--by-category");
+      emptyEl.classList.remove("d-none");
+      emptyEl.querySelector(".admin-empty-title").textContent = "No resources in this category";
+      emptyEl.querySelector(".admin-empty-text").textContent =
+        `No ${STATUS_META[state.currentTab].label.toLowerCase()} listings for "${state.filterCategory}". Choose "All categories" or pick another category.`;
+      return;
+    }
+
+    emptyEl.classList.add("d-none");
+    listEl.classList.add("admin-resource-list--by-category");
+
+    const groups = groupVisibleByCategory(visible);
+    listEl.innerHTML = groups
+      .map(
+        ({ category, resources }, gi) => `
+      <section class="admin-category-section" aria-labelledby="admin-cat-head-${gi}">
+        <h2 id="admin-cat-head-${gi}" class="admin-category-section-title">
+          <span class="admin-category-section-label">${escapeHTML(category)}</span>
+          <span class="admin-category-section-count">${resources.length}</span>
+        </h2>
+        <div class="admin-category-section-grid">
+          ${resources.map((r) => renderResourceCard(r)).join("")}
+        </div>
+      </section>
+    `
+      )
+      .join("");
   };
 
   const loadResources = async () => {
@@ -263,11 +386,15 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(data?.message || "Failed to load resources.");
       }
       state.resources = Array.isArray(data) ? data : [];
+      state.filterCategory = "";
       updateCounts(state.resources);
+      categoryToolbar?.classList.remove("d-none");
       renderResources();
       setMsg(state.resources.length ? "" : "No resources have been submitted yet.", "info");
     } catch (error) {
+      categoryToolbar?.classList.add("d-none");
       listEl.innerHTML = "";
+      listEl.classList.remove("admin-resource-list--by-category");
       setMsg(error.message || "Failed to load resources.", "error");
     } finally {
       state.loading = false;
@@ -277,6 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const switchTab = (status) => {
     if (!STATUS_META[status]) return;
     state.currentTab = status;
+    state.filterCategory = "";
     tabs.forEach((tab) => {
       const isActive = tab.dataset.status === status;
       tab.classList.toggle("active", isActive);
@@ -339,6 +467,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const tab = event.target.closest(".admin-tab");
     if (!tab) return;
     switchTab(tab.dataset.status);
+  });
+
+  categoryFilter?.addEventListener("change", () => {
+    state.filterCategory = categoryFilter.value || "";
+    renderResources();
   });
 
   listEl.addEventListener("click", (event) => {

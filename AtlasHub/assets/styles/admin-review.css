@@ -154,6 +154,54 @@
   background: linear-gradient(135deg, #f0a883 0%, #e58361 50%, #c0533c 100%);
 }
 
+/* ---------- Category filter (within current status tab) ---------- */
+.admin-review-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+  margin: 0.25rem 0 0.85rem;
+  padding: 0.65rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 139, 123, 0.18);
+  background: rgba(244, 252, 249, 0.65);
+}
+
+.admin-review-toolbar-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #24584d;
+  white-space: nowrap;
+}
+
+.admin-review-toolbar-label i {
+  color: #3b8b7b;
+  font-size: 0.95rem;
+}
+
+.admin-category-filter-select {
+  flex: 1 1 220px;
+  min-width: min(100%, 220px);
+  max-width: 420px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1px solid rgba(59, 139, 123, 0.28);
+  padding: 0.5rem 0.75rem;
+}
+
+.admin-review-toolbar-hint {
+  flex: 1 1 100%;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #5a726a;
+}
+
 /* ---------- Status / message banner ---------- */
 .admin-review-msg {
   text-align: center;
@@ -175,6 +223,63 @@
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 18px;
   padding-top: 0.5rem;
+}
+
+/* Grouped layout: vertical stack of category sections, each with its own card grid */
+.admin-resource-list.admin-resource-list--by-category {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  grid-template-columns: none;
+}
+
+.admin-category-section {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.admin-category-section-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0 0 0.75rem;
+  padding: 0.35rem 0 0.5rem;
+  border-bottom: 2px solid rgba(59, 139, 123, 0.22);
+  font-family: "Alice", serif;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  font-weight: 600;
+  color: #24584d;
+  letter-spacing: -0.02em;
+}
+
+.admin-category-section-label {
+  min-width: 0;
+}
+
+.admin-category-section-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: rgba(59, 139, 123, 0.14);
+  color: #1f6d5c;
+  border: 1px solid rgba(59, 139, 123, 0.28);
+}
+
+.admin-category-section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
 }
 
 .admin-resource-card {
@@ -363,6 +468,17 @@
   outline: 2px solid rgba(234, 126, 87, 0.85);
   outline-offset: 3px;
   border-radius: 4px;
+}
+
+.admin-meta-item--multiline {
+  align-items: flex-start;
+}
+
+.admin-hours-multiline {
+  display: block;
+  min-width: 0;
+  white-space: pre-line;
+  line-height: 1.45;
 }
 
 /* ---------- Status actions ---------- */

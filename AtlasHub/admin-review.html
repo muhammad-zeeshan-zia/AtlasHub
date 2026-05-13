@@ -143,7 +143,7 @@
               </h1>
               <p class="admin-review-subtitle">
                 Review pending submissions, manage approved listings, and revisit declined ones — change a status
-                anytime.
+                anytime. Within each tab, resources are grouped by category (same order as the public Resources page).
               </p>
             </div>
 
@@ -166,6 +166,20 @@
                 <span class="admin-tab-label">Rejected</span>
                 <span class="admin-tab-count" id="countRejected">0</span>
               </button>
+            </div>
+
+            <div id="adminCategoryToolbar" class="admin-review-toolbar d-none" role="region"
+                 aria-label="Filter listings by category">
+              <label class="admin-review-toolbar-label" for="adminCategoryFilter">
+                <i class="bi bi-funnel" aria-hidden="true"></i>
+                Category filter
+              </label>
+              <select id="adminCategoryFilter" class="form-select admin-category-filter-select"
+                      aria-describedby="adminCategoryFilterHint">
+              </select>
+              <p id="adminCategoryFilterHint" class="admin-review-toolbar-hint">
+                Limits the list below to one category for this status tab. Choose "All categories" to show every section again.
+              </p>
             </div>
 
             <div id="adminReviewMsg" class="admin-review-msg" role="status" aria-live="polite"></div>

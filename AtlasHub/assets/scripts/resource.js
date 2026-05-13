@@ -147,6 +147,9 @@ document.addEventListener("DOMContentLoaded", function () {
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#39;");
 
+  /** Normalize CRLF and escape for HTML; newlines preserved for `white-space: pre-line` display. */
+  const escapeHoursMultiline = (value) => escapeHtml(String(value ?? "").replace(/\r\n/g, "\n"));
+
   const normalizeUrl = (url) => {
     if (!url || url === "N/A") return "";
     if (/^https?:\/\//i.test(url)) return url;
@@ -261,19 +264,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const session = getSession();
     // Bookmark/Save button disabled (requested).
-    // const showBookmark = Boolean(rid && session?.token);
-    // const bookmarkSaved = rid && savedIds.has(rid);
-    // const bookmarkHtml = showBookmark
-    //   ? `<button type="button"
-    //       class="resource-bookmark-btn"
-    //       data-resource-id="${escapeHtml(rid)}"
-    //       aria-label="${bookmarkSaved ? "Remove saved resource" : "Save resource"}"
-    //       aria-pressed="${bookmarkSaved ? "true" : "false"}"
-    //       title="${bookmarkSaved ? "Saved — click to remove" : "Save resource"}">
-    //       <i class="bi ${bookmarkSaved ? "bi-bookmark-fill" : "bi-bookmark"}" aria-hidden="true"></i>
-    //     </button>`
-    //   : "";
-    const bookmarkHtml = "";
+    const showBookmark = Boolean(rid && session?.token);
+    const bookmarkSaved = rid && savedIds.has(rid);
+    const bookmarkHtml = showBookmark
+      ? `<button type="button"
+          class="resource-bookmark-btn"
+          data-resource-id="${escapeHtml(rid)}"
+          aria-label="${bookmarkSaved ? "Remove saved resource" : "Save resource"}"
+          aria-pressed="${bookmarkSaved ? "true" : "false"}"
+          title="${bookmarkSaved ? "Saved — click to remove" : "Save resource"}">
+          <i class="bi ${bookmarkSaved ? "bi-bookmark-fill" : "bi-bookmark"}" aria-hidden="true"></i>
+        </button>`
+      : "";
+    // const bookmarkHtml = "";
 
     const mapLat = parseFiniteCoord(item.latitude);
     const mapLng = parseFiniteCoord(item.longitude);
@@ -317,7 +320,10 @@ document.addEventListener("DOMContentLoaded", function () {
         : ""
       }
         ${hasHours
-        ? `<div class="smallLine mt-2"><strong>Hours:</strong> ${escapeHtml(item.hours)}</div>`
+        ? `<div class="resource-hours-wrap smallLine mt-2">
+                <strong class="resource-hours-label">Hours:</strong>
+                <span class="resource-hours-multiline">${escapeHoursMultiline(item.hours)}</span>
+              </div>`
         : ""
       }
         ${websiteUrl
@@ -444,65 +450,65 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   // Bookmark/Save click handler disabled (requested).
-  // tabContent.addEventListener("click", async (event) => {
-  //   const btn = event.target.closest(".resource-bookmark-btn");
-  //   if (!btn) return;
-  //
-  //   const session = getSession();
-  //   if (!session?.token) return;
-  //
-  //   const resourceId = btn.getAttribute("data-resource-id");
-  //   if (!resourceId) return;
-  //
-  //   event.preventDefault();
-  //
-  //   const wasSaved = savedIds.has(resourceId);
-  //   btn.disabled = true;
-  //
-  //   try {
-  //     if (wasSaved) {
-  //       const response = await fetch(`${API_BASE}/users/me/saved-resources/${resourceId}`, {
-  //         method: "DELETE",
-  //         headers: { Authorization: `Bearer ${session.token}` }
-  //       });
-  //       const data = await response.json().catch(() => ({}));
-  //       if (!response.ok) {
-  //         throw new Error(data.message || "Could not remove saved resource.");
-  //       }
-  //       savedIds.delete(resourceId);
-  //       savedResourcesCache = savedResourcesCache.filter((r) => String(r._id) !== resourceId);
-  //       syncBookmarkUiForId(resourceId, false);
-  //       btn.closest(".user-saved-listing")?.remove();
-  //       renderSavedPane();
-  //     } else {
-  //       const response = await fetch(`${API_BASE}/users/me/saved-resources`, {
-  //         method: "POST",
-  //         headers: {
-  //           Authorization: `Bearer ${session.token}`,
-  //           "Content-Type": "application/json"
-  //         },
-  //         body: JSON.stringify({ resourceId })
-  //       });
-  //       const data = await response.json().catch(() => ({}));
-  //       if (!response.ok) {
-  //         throw new Error(data.message || "Could not save resource.");
-  //       }
-  //       savedIds.add(resourceId);
-  //       const fromList =
-  //         approvedResourcesCache.find((r) => String(r._id) === resourceId) || data.resource;
-  //       if (fromList && !savedResourcesCache.some((r) => String(r._id) === resourceId)) {
-  //         savedResourcesCache.unshift(fromList);
-  //       }
-  //       syncBookmarkUiForId(resourceId, true);
-  //       renderSavedPane();
-  //     }
-  //   } catch (error) {
-  //     console.error(error.message || error);
-  //     alert(error.message || "Something went wrong.");
-  //   } finally {
-  //     btn.disabled = false;
-  //   }
-  // });
+  tabContent.addEventListener("click", async (event) => {
+    const btn = event.target.closest(".resource-bookmark-btn");
+    if (!btn) return;
+
+    const session = getSession();
+    if (!session?.token) return;
+
+    const resourceId = btn.getAttribute("data-resource-id");
+    if (!resourceId) return;
+
+    event.preventDefault();
+
+    const wasSaved = savedIds.has(resourceId);
+    btn.disabled = true;
+
+    try {
+      if (wasSaved) {
+        const response = await fetch(`${API_BASE}/users/me/saved-resources/${resourceId}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${session.token}` }
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.message || "Could not remove saved resource.");
+        }
+        savedIds.delete(resourceId);
+        savedResourcesCache = savedResourcesCache.filter((r) => String(r._id) !== resourceId);
+        syncBookmarkUiForId(resourceId, false);
+        btn.closest(".user-saved-listing")?.remove();
+        renderSavedPane();
+      } else {
+        const response = await fetch(`${API_BASE}/users/me/saved-resources`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ resourceId })
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.message || "Could not save resource.");
+        }
+        savedIds.add(resourceId);
+        const fromList =
+          approvedResourcesCache.find((r) => String(r._id) === resourceId) || data.resource;
+        if (fromList && !savedResourcesCache.some((r) => String(r._id) === resourceId)) {
+          savedResourcesCache.unshift(fromList);
+        }
+        syncBookmarkUiForId(resourceId, true);
+        renderSavedPane();
+      }
+    } catch (error) {
+      console.error(error.message || error);
+      alert(error.message || "Something went wrong.");
+    } finally {
+      btn.disabled = false;
+    }
+  });
 
   const bootstrapResources = async () => {
     await refreshSavedBookmarks();
